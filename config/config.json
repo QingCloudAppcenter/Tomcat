@@ -1,0 +1,286 @@
+{
+	"type": "array",
+	"properties": [
+		{
+			"key": "cluster",
+			"description": "Tomcat cluster with Session Replication",
+			"type": "array",
+			"properties": [
+				{
+					"key": "name",
+					"label": "Name",
+					"description": "The name of the Tomcat cluster service",
+					"type": "string",
+					"default": "Tomcat Cluster",
+					"required": "no"
+				},
+				{
+					"key": "description",
+					"label": "Description",
+					"description": "The description of the Tomcat cluster service",
+					"type": "string",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "vxnet",
+					"label": "vxnet",
+					"description": "Choose a vxnet to join",
+					"type": "string",
+					"default": "",
+					"required": "yes"
+				},
+				{
+					"key": "tomcat_nodes",
+					"label": "Tomcat Nodes",
+					"description": "Tomcat node properties",
+					"type": "array",
+					"properties": [
+						{
+							"key": "loadbalancer",
+							"label": "loadbalancer",
+							"description": "Choose a loadbalancer service with EIP to use (When you create loadbalancer, you need to select the Internet type. Loadbalancer listener need to enable Session Sticky and set Timeout to 86400s. Listener protocol could be http and https)",
+							"type": "loadbalancer",
+							"port": 8080,
+							"default": [
+							],
+							"required": "yes"
+						},
+						{
+							"key": "cpu",
+							"label": "CPU",
+							"description": "CPUs of each node",
+							"type": "integer",
+							"default": 1,
+							"range": [
+								1,
+								2,
+								4,
+								8
+							],
+							"required": "yes"
+						},
+						{
+							"key": "memory",
+							"label": "Memory",
+							"description": "memory of each node (in MiB)",
+							"type": "integer",
+							"default": 2048,
+							"range": [
+								2048,
+								4096,
+								8192
+							],
+							"required": "yes"
+						},
+						{
+							"key": "instance_class",
+							"label": "Instance Class",
+							"description": "The instance type for the cluster to run, such as high performance, high performance plus",
+							"type": "integer",
+							"default": 0,
+							"range": [
+								0,
+								1
+							],
+							"required": "yes"
+						},
+						{
+							"key": "count",
+							"label": "Node Count",
+							"description": "Number of nodes for the cluster to create",
+							"type": "integer",
+							"default": 2,
+							"range": [
+								2,
+								3,
+								4,
+								5,
+								6
+							],
+							"required": "yes"
+						},
+						{
+							"key": "volume_size",
+							"label": "Volume Size",
+							"description": "The volume size for each node",
+							"type": "integer",
+							"default": 10,
+							"required": "yes"
+						}
+					]
+				}
+			]
+		},
+		{
+			"key": "env",
+			"description": "Tomcat cluster service properties",
+			"type": "array",
+			"properties": [
+				{
+					"key": "tomcat_user",
+					"label": "User name to manage Tomcat",
+					"description": "User name to manage Tomcat",
+					"type": "string",
+					"default": "qingAdmin",
+					"required": "yes"
+				},
+				{
+					"key": "tomcat_pwd",
+					"label": "Password of Tomcat user",
+					"description": "Password of Tomcat user, the default password is 'qing0pwd'",
+					"type": "password",
+					"changeable": true,
+					"default": "qing0pwd",
+					"required": "yes"
+				},
+				{
+					"key": "redis_db",
+					"label": "Redis Database",
+					"description": "Whether to use Redis database to replicate session data",
+					"type": "boolean",
+					"default": false,
+					"range": [
+						true,
+						false
+					],
+					"required": "yes"
+				},
+				{
+					"key": "redis_db_host",
+					"label": "The IP address of Redis database",
+					"description": "The IP address of Redis database, leave empty if you choose not to use Redis database",
+					"type": "string",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "redis_db_port",
+					"label": "The port of Redis database",
+					"description": "The port of Redis database, leave empty if you choose not to use Redis database",
+					"type": "string",
+					"default": "6379",
+					"required": "no"
+				},
+				{
+					"key": "redis_db_num",
+					"label": "Redis database number",
+					"description": "Redis Database Number, leave empty if you choose not to use Redis database",
+					"type": "string",
+					"default": "0",
+					"required": "no"
+				},
+				{
+					"key": "access_key_id",
+					"label": "access_key_id",
+					"description": "Provide an access_key_id for web application(WAR) deployment",
+					"type": "string",
+					"changeable": true,
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "secret_access_key",
+					"label": "secret_access_key",
+					"description": "Provide a secret_access_key for web application(WAR) deployment",
+					"type": "password",
+					"changeable": true,
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "zone",
+					"label": "zone",
+					"description": "Provide the zone of bucket for web application(WAR) deployment",
+					"type": "string",
+					"changeable": true,
+					"default": "pek3a",
+					"range": [
+						"pek3a",
+						"sh1a"
+					],
+					"required": "no"
+				},
+				{
+					"key": "bucket",
+					"label": "bucket",
+					"description": "Provide the bucket name for web application(WAR) deployment",
+					"type": "string",
+					"changeable": true,
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "access_address",
+					"label": "access_address",
+					"description": "Provide the QingStor download address for web application(WAR) deployment, such as https://abc.xyz or http://1.2.3.4 . (You can use the loadbalancer's eip, if you use domain name, you need to configure A record to the load balancer bound EIP at the domain name resolver)",
+					"type": "string",
+					"changeable": true,
+					"default": "http://abc.xyz",
+					"required": "no"
+				},
+				{
+					"key": "war_name",
+					"label": "war name",
+					"description": "Provide the web application(WAR) file Name",
+					"type": "string",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_db",
+					"label": "MySql Database",
+					"description": "Whether to use MySql database for development",
+					"type": "boolean",
+					"default": false,
+					"range": [
+						true,
+						false
+					],
+					"required": "yes"
+				},
+				{
+					"key": "mysql_db_user",
+					"label": "User name of MySql database",
+					"description": "User name of MySql database, leave empty if you choose not to use MySql database",
+					"type": "string",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_db_pwd",
+					"label": "Password of MySql database",
+					"description": "Password of MySql database, leave empty if you choose not to use MySql database",
+					"type": "password",
+					"changeable": true,
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_db_host",
+					"label": "The IP address of MySql database",
+					"description": "The IP address of MySql database, leave empty if you choose not to use MySql database",
+					"type": "string",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_db_port",
+					"label": "The port of MySql database",
+					"description": "The port of MySql database, leave empty if you choose not to use MySql database",
+					"type": "string",
+					"default": "3306",
+					"required": "no"
+				},
+				{
+					"key": "mysql_db_name",
+					"label": "MySql database name",
+					"description": "MySql Database Name, leave empty if you choose not to use MySql database",
+					"type": "string",
+					"default": "mysql",
+					"required": "no"
+				}
+			]
+		}
+	]
+}
