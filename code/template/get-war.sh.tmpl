@@ -1,0 +1,10 @@
+#! /bin/bash
+{{$bucket :=getv "/env/qingstor_bucket"}}
+{{$war_name :=getv "/env/qingstor_war_name"}}
+qingStorEnable={{$bucket}}
+
+# only download war when qingStor is enabled
+if [ -n "$qingStorEnable" ]
+then
+	qsctl cp -f qs://{{$bucket}}/{{$war_name}} /tmp/war-listen/
+fi
