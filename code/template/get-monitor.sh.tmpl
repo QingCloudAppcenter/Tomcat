@@ -1,0 +1,9 @@
+#! /bin/bash
+{{$tomcat_user :=getv "/env/tomcat_user"}}
+{{$tomcat_pwd :=getv "/env/tomcat_pwd"}}
+
+tomcat_mgr_url="http://localhost:8080/manager/status?XML=true"
+tmp_all_data="/tmp/all_data.xml"
+
+wget -q --http-user="{{$tomcat_user}}" --http-password="{{$tomcat_pwd}}" "$tomcat_mgr_url" -O "$tmp_all_data"
+python /opt/apache-tomcat-7.0.78/bin/get-monitor.py

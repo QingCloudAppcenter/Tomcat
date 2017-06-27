@@ -1,0 +1,13 @@
+#! /bin/bash
+
+{{$war_source :=getv "/env/war_source"}}
+{{$bucket :=getv "/env/qingstor_bucket"}}
+{{$war_name :=getv "/env/qingstor_war_name"}}
+# only download war when qingStor is enabled
+{{if eq $war_source "qingstor"}}
+qsctl cp -f qs://{{$bucket}}/{{$war_name}} /tmp/war-listen/
+{{else if eq $war_source "tomcat_manager"}}
+python /opt/apache-tomcat-7.0.78/bin/monitor-war.py &
+{{else}}
+exit 0
+{{end}}

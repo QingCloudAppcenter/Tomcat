@@ -1,0 +1,16 @@
+{{$access_key_id :=getv "/env/qingstor_access_key_id"}}
+{{$secret_access_key :=getv "/env/qingstor_secret_access_key"}}
+{{$zone :=getv "/env/qingstor_zone"}}
+{{$bucket :=getv "/env/qingstor_bucket"}}
+
+#host: 'qingstor.com'
+access_address: ""
+#port: 443
+#protocol: 'https'
+connection_retries: 3
+access_key_id: '{{$access_key_id}}'
+secret_access_key: '{{$secret_access_key}}'
+zone: '{{$zone}}'
+bucket: '{{$bucket}}'
+# Valid levels are 'debug', 'info', 'warn', 'error', and 'fatal'.
+log_level: 'info'

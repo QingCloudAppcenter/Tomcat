@@ -1,0 +1,167 @@
+{
+     "name": {{cluster.name}},
+     "description": {{cluster.description}},
+     "vxnet": {{cluster.vxnet}},
+     "nodes": [
+         {
+             "role": "tomcat_nodes",
+             "container": {
+                 "type": "kvm",
+                 "zone": "pek3a",
+                 "image": "img-aep5avrw"
+             },
+             "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
+             "instance_class": {{cluster.tomcat_nodes.instance_class}},
+             "count": {{cluster.tomcat_nodes.count}},
+             "cpu": {{cluster.tomcat_nodes.cpu}},
+             "memory": {{cluster.tomcat_nodes.memory}},
+             "volume": {
+                "size": {{cluster.tomcat_nodes.volume_size}},
+                "mount_point": "/var/www/upload_cache",
+                "mount_options": "noatime,nodev,nosuid",
+                "filesystem": "ext4"
+            },
+             "vertical_scaling_policy": "sequential",
+             "services": {
+             	 "init": {
+             	 	"cmd": "/opt/apache-tomcat-7.0.78/bin/get-war.sh"
+             	 },
+                 "start": {
+                    "cmd": "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+                 },
+                 "restart": {
+                   "cmd": "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+                 },
+                 "stop": {
+                     "cmd": "/opt/apache-tomcat-7.0.78/bin/catalina.sh stop"
+                 },
+                 "redeploy": {
+                 	 "type": "custom",
+                     "cmd": "/opt/apache-tomcat-7.0.78/bin/get-war.sh"
+                 }
+             },
+            "health_check": {
+                "enable": true,
+                "interval_sec": 300,
+                "timeout_sec": 60,
+                "action_timeout_sec": 60,
+                "healthy_threshold": 5,
+                "unhealthy_threshold": 5,
+                "check_cmd": "/opt/apache-tomcat-7.0.78/bin/serverStatus.sh",
+                "action_cmd": "/opt/apache-tomcat-7.0.78/bin/recheck-health.sh"
+            },
+            "monitor": {
+                "enable": true,
+                "cmd": "/opt/apache-tomcat-7.0.78/bin/get-monitor.sh",
+                "items": {
+                    "ajp_connector": {
+                        "unit": "",
+                        "value_type": "str",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "ajp_currentThreadCount": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "ajp_currentThreadsBusy": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "ajp_maxTime": {
+                        "unit": "ms",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "ajp_requestCount": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "http_connector": {
+                        "unit": "",
+                        "value_type": "str",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "http_currentThreadCount": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "http_currentThreadsBusy": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "http_maxTime": {
+                        "unit": "ms",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    },
+                    "http_requestCount": {
+                        "unit": "count",
+                        "value_type": "int",
+                        "statistics_type": "latest",
+                        "scale_factor_when_display": 1
+                    }
+                },
+                "groups": {
+                    "connector": ["ajp_connector", "http_connector"],
+                    "currentThreadCount": ["ajp_currentThreadCount", "http_currentThreadCount"],
+                    "currentThreadsBusy": ["ajp_currentThreadsBusy", "http_currentThreadsBusy"],
+                    "maxTime": ["ajp_maxTime", "http_maxTime"],
+                    "requestCount": ["ajp_requestCount", "http_requestCount"]                    
+                },
+                "display": ["connector", "currentThreadCount", "currentThreadsBusy", "maxTime", "requestCount"],
+                "alarm": ["ajp_currentThreadsBusy", "http_currentThreadsBusy"]
+            },
+             "user_access": true,
+             "advanced_actions": ["scale_horizontal"]
+         }     
+     ],
+     "env": {
+         "tomcat_user": {{env.tomcat_user}},
+         "tomcat_pwd": {{env.tomcat_pwd}},
+         "tomcat_encoding": {{env.tomcat_encoding}},
+         "threadpool_maxThreads": {{env.threadpool_maxThreads}},
+         "threadpool_minSpareThreads": {{env.threadpool_minSpareThreads}},
+         "threadpool_maxIdleTime": {{env.threadpool_maxIdleTime}},
+         "java_opts": {{env.java_opts}},
+         "war_source": {{env.war_source}},
+     	 "redis_db": {{env.redis_db}},
+     	 "redis_db_host": {{env.redis_db_host}},
+     	 "redis_db_port": {{env.redis_db_port}},
+     	 "redis_db_num": {{env.redis_db_num}},
+         "qingstor_access_key_id": {{env.access_key_id}},
+         "qingstor_secret_access_key": {{env.secret_access_key}},
+         "qingstor_zone": {{env.zone}},
+         "qingstor_bucket": {{env.bucket}},
+         "qingstor_war_name": {{env.war_name}},
+         "mysql_db": {{env.mysql_db}},
+         "mysql_db_user": {{env.mysql_db_user}},
+         "mysql_db_pwd": {{env.mysql_db_pwd}},
+     	 "mysql_db_host": {{env.mysql_db_host}},
+     	 "mysql_db_port": {{env.mysql_db_port}},
+     	 "mysql_db_name": {{env.mysql_db_name}},
+         "jdbc_dsname": {{env.jdbc_dsname}},
+         "jdbc_maxActive": {{env.jdbc_maxActive}},
+         "jdbc_maxIdle": {{env.jdbc_maxIdle}},
+         "jdbc_maxWait": {{env.jdbc_maxWait}}
+     },
+     "endpoints": {
+         "http": {
+             "port": 8080,
+             "protocol": "http"
+         }
+     }
+ }
