@@ -31,6 +31,24 @@
 					"required": "yes"
 				},
 				{
+					"key": "redis_service",
+					"label": "Redis",
+					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it. ",
+					"type": "service",
+					"tag": ["Redis", "redis"],
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_service",
+					"label": "MySql",
+					"description": "Choose a MySql to use and related MySql infomation in service properties section below, leave empty if you choose not to use it",
+					"type": "service",
+					"tag": ["MySql", "mysql"],
+					"default": "",
+					"required": "no"
+				},
+				{
 					"key": "tomcat_nodes",
 					"label": "Tomcat Nodes",
 					"description": "Tomcat node properties",
@@ -39,7 +57,7 @@
 						{
 							"key": "loadbalancer",
 							"label": "loadbalancer",
-							"description": "Choose a loadbalancer service with EIP to use (When you create loadbalancer, you need to select the Internet type. Loadbalancer listener need to enable Session Sticky and set Timeout to 86400s. Listener protocol could be http and https)",
+							"description": "Choose a loadbalancer service (When you create loadbalancer, you need to select the Internet type. Loadbalancer listener need to enable Session Sticky. Listener protocol should be http)",
 							"type": "loadbalancer",
 							"port": 8080,
 							"default": [
@@ -106,10 +124,73 @@
 							"description": "The volume size for each node",
 							"type": "integer",
 							"default": 10,
-							"required": "yes"
+							"required": "no"
 						}
 					]
-				}
+				},
+				{
+					"key": "log_node",
+					"label": "Log Server Node",
+					"description": "Log server to collect all log files from all Tomcat nodes",
+					"type": "array",
+					"properties": [
+						{
+							"key": "cpu",
+							"label": "CPU",
+							"description": "CPUs of each node",
+							"type": "integer",
+							"default": 1,
+							"range": [
+								1,
+								2,
+								4,
+								8
+							],
+							"required": "yes"
+						},
+						{
+							"key": "memory",
+							"label": "Memory",
+							"description": "memory of each node (in MiB)",
+							"type": "integer",
+							"default": 2048,
+							"range": [
+								2048,
+								4096,
+								8192
+							],
+							"required": "yes"
+						},
+						{
+							"key": "instance_class",
+							"label": "Instance Class",
+							"description": "The instance type for the cluster to run, such as high performance, high performance plus",
+							"type": "integer",
+							"default": 0,
+							"range": [
+								0,
+								1
+							],
+							"required": "yes"
+						},
+						{
+							"key": "count",
+							"label": "Node Count",
+							"description": "Number of nodes for the cluster to create",
+							"type": "integer",
+							"default": 1,
+							"required": "yes"
+						},
+						{
+							"key": "volume_size",
+							"label": "Volume Size",
+							"description": "The volume size for this log server",
+							"type": "integer",
+							"default": 10,
+							"required": "no"
+						}
+					]
+				}			
 			]
 		},
 		{
@@ -135,32 +216,82 @@
 					"required": "yes"
 				},
 				{
-					"key": "redis_db",
-					"label": "Redis Database",
-					"description": "Whether to use Redis database to replicate session data",
-					"type": "boolean",
-					"default": false,
+					"key": "tomcat_encoding",
+					"label": "Tomcat character encoding",
+					"description": "Tomcat character encoding, this value will be set in javax.servlet.request.encoding and file.encoding when launching Tomcat, also set in URIEncoding in server.xml",
+					"type": "string",
+					"default": "UTF-8",
+					"required": "yes"
+				},
+				{
+					"key": "tomcat_log_level",
+					"label": "Tomcat logging level",
+					"description": "The logging level of log4j within Tomcat scope, settting 'INFO' as default value",
+					"type": "string",
+					"default": "INFO",
 					"range": [
-						true,
-						false
+						"OFF",
+						"FATAL",
+						"ERROR",
+						"WARN",
+						"INFO",
+						"DEBUG",
+						"ALL"
 					],
 					"required": "yes"
 				},
 				{
-					"key": "redis_db_host",
-					"label": "The IP address of Redis database",
-					"description": "The IP address of Redis database, leave empty if you choose not to use Redis database",
+					"key": "tomcat_log_packages",
+					"label": "Tomcat logging packages",
+					"description": "Packages to include in the logging, separated by comma. Tomcat defines loggers by Engine and Host names. For example: log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost],log4j.logger.org.apache.catalina.session",
 					"type": "string",
 					"default": "",
 					"required": "no"
 				},
 				{
-					"key": "redis_db_port",
-					"label": "The port of Redis database",
-					"description": "The port of Redis database, leave empty if you choose not to use Redis database",
+					"key": "threadpool_maxThreads",
+					"label": "The max number of active threads",
+					"description": "The max number of active threads in Tomcat shared thread pool",
 					"type": "string",
-					"default": "6379",
+					"default": "200",
+					"required": "yes"
+				},
+				{
+					"key": "threadpool_minSpareThreads",
+					"label": "The minimum number of kept alive threads",
+					"description": "The minimum number of threads always kept alive in Tomcat shared thread pool",
+					"type": "string",
+					"default": "25",
+					"required": "yes"
+				},
+				{
+					"key": "threadpool_maxIdleTime",
+					"label": "The number of milliseconds before an idle thread shutsdown",
+					"description": "The number of milliseconds before an idle thread shutsdown, unless the number of active threads are less or equal to minSpareThreads",
+					"type": "string",
+					"default": "60000",
+					"required": "yes"
+				},
+				{
+					"key": "java_opts",
+					"label": "Java runtime properties",
+					"description": "Java runtime properties when running Tomcat, leave empty if you accept our default JVM heap size setting(1/4 memory as xms, and 1/2 memory as xmx). Note: our default setting will not take effect if you input any value in this area, the validaton of JAVA_OPTS should be handled by you ahead of time, otherwise Tomcat server may fail to start",
+					"type": "string",
+					"default": "",
 					"required": "no"
+				},
+				{
+					"key": "war_source",
+					"label": "How to get WAR file",
+					"description": "Choose a way to upload WAR to Tomcat server, the default way is using Tomcat manager UI or command, the other option is QingStor. Note: Tomcat manager could only deploy WAR to single node, we monitor that deployment and copy the deployed WAR file to watched folder of Tomcat FarmWarDeployer, which will distribute this file to other nodes",
+					"type": "string",
+					"changeable": true,
+					"default": "tomcat_manager",
+					"range": [
+						"tomcat_manager",
+						"qingstor"
+					],
+					"required": "yes"
 				},
 				{
 					"key": "redis_db_num",
@@ -173,7 +304,7 @@
 				{
 					"key": "access_key_id",
 					"label": "access_key_id",
-					"description": "Provide an access_key_id for web application(WAR) deployment",
+					"description": "access_key_id to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "",
@@ -182,7 +313,7 @@
 				{
 					"key": "secret_access_key",
 					"label": "secret_access_key",
-					"description": "Provide a secret_access_key for web application(WAR) deployment",
+					"description": "secret_access_key to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "password",
 					"changeable": true,
 					"default": "",
@@ -191,7 +322,7 @@
 				{
 					"key": "zone",
 					"label": "zone",
-					"description": "Provide the zone of bucket for web application(WAR) deployment",
+					"description": "Zone of bucket for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "pek3a",
@@ -204,72 +335,18 @@
 				{
 					"key": "bucket",
 					"label": "bucket",
-					"description": "Provide the bucket name for web application(WAR) deployment",
+					"description": "Bucket name for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "access_address",
-					"label": "access_address",
-					"description": "Provide the QingStor download address for web application(WAR) deployment, such as https://abc.xyz or http://1.2.3.4 . (You can use the loadbalancer's eip, if you use domain name, you need to configure A record to the load balancer bound EIP at the domain name resolver)",
-					"type": "string",
-					"changeable": true,
-					"default": "http://abc.xyz",
 					"required": "no"
 				},
 				{
 					"key": "war_name",
 					"label": "war name",
-					"description": "Provide the web application(WAR) file Name",
+					"description": "The web application(WAR) file Name, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db",
-					"label": "MySql Database",
-					"description": "Whether to use MySql database for development",
-					"type": "boolean",
-					"default": false,
-					"range": [
-						true,
-						false
-					],
-					"required": "yes"
-				},
-				{
-					"key": "mysql_db_user",
-					"label": "User name of MySql database",
-					"description": "User name of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_pwd",
-					"label": "Password of MySql database",
-					"description": "Password of MySql database, leave empty if you choose not to use MySql database",
-					"type": "password",
-					"changeable": true,
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_host",
-					"label": "The IP address of MySql database",
-					"description": "The IP address of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_port",
-					"label": "The port of MySql database",
-					"description": "The port of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "3306",
 					"required": "no"
 				},
 				{
@@ -278,6 +355,50 @@
 					"description": "MySql Database Name, leave empty if you choose not to use MySql database",
 					"type": "string",
 					"default": "mysql",
+					"required": "no"
+				},
+				{
+					"key": "mysql_ip_mode",
+					"label": "The mode of MySql IP address",
+					"description": "Choose to use MySQL reserved writing or reading IP address, using writable IP as default value",
+					"type": "string",
+					"default": "write_ip",
+					"range": [
+						"write_ip",
+						"read_ip"
+					],
+					"required": "no"
+				},
+				{
+					"key": "jdbc_dsname",
+					"label": "Datasoure name of Tomcat JDBC connection pool",
+					"description": "Datasoure name of Tomcat JDBC connection pool to connect MySql database",
+					"type": "string",
+					"default": "TestDB",
+					"required": "no"
+				},
+				{
+					"key": "jdbc_maxActive",
+					"label": "The maximum number of active database connections",
+					"description": "The maximum number of active database connections that can be allocated from this pool at the same time",
+					"type": "string",
+					"default": "100",
+					"required": "no"
+				},
+				{
+					"key": "jdbc_maxIdle",
+					"label": "The maximum number of kept database connections",
+					"description": "The maximum number of database connections that should be kept in the pool at all times",
+					"type": "string",
+					"default": "30",
+					"required": "no"
+				},
+				{
+					"key": "jdbc_maxWait",
+					"label": "The maximum number of milliseconds before a database connection timeout",
+					"description": "The maximum number of milliseconds that the pool will wait (when there are no available connections) for a database connection to be returned before throwing an exception",
+					"type": "string",
+					"default": "30000",
 					"required": "no"
 				}
 			]

@@ -1,0 +1,6 @@
+[template]
+src = "setup_hosts.sh.tmpl"
+dest = "/opt/setup_hosts.sh"
+keys = [
+    "/",
+]

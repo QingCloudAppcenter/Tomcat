@@ -42,5 +42,6 @@
   {{$tomcat_pwd :=getv "/env/tomcat_pwd"}}
   <role rolename="standard"/>
   <role rolename="manager-gui"/>
-  <user username="{{$tomcat_user}}" password="{{$tomcat_pwd}}" roles="standard,manager-gui" />
+  <role rolename="manager-script"/>
+  <user username="{{$tomcat_user}}" password="{{$tomcat_pwd}}" roles="standard,manager-gui,manager-script" />
 </tomcat-users>

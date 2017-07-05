@@ -2,10 +2,9 @@
 {{$secret_access_key :=getv "/env/qingstor_secret_access_key"}}
 {{$zone :=getv "/env/qingstor_zone"}}
 {{$bucket :=getv "/env/qingstor_bucket"}}
-{{$access_address :=getv "/env/qingstor_access_address"}}
 
 #host: 'qingstor.com'
-access_address: "{{$access_address}}"
+access_address: ""
 #port: 443
 #protocol: 'https'
 connection_retries: 3
