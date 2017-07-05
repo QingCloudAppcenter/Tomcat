@@ -31,6 +31,24 @@
 					"required": "yes"
 				},
 				{
+					"key": "redis_service",
+					"label": "Redis",
+					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it. ",
+					"type": "service",
+					"tag": ["Redis", "redis"],
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "mysql_service",
+					"label": "MySql",
+					"description": "Choose a MySql to use and related MySql infomation in service properties section below, leave empty if you choose not to use it",
+					"type": "service",
+					"tag": ["MySql", "mysql"],
+					"default": "",
+					"required": "no"
+				},
+				{
 					"key": "tomcat_nodes",
 					"label": "Tomcat Nodes",
 					"description": "Tomcat node properties",
@@ -109,6 +127,69 @@
 							"required": "no"
 						}
 					]
+				},
+				{
+					"key": "log_node",
+					"label": "Log Server Node",
+					"description": "Log server to collect all log files from all Tomcat nodes",
+					"type": "array",
+					"properties": [
+						{
+							"key": "cpu",
+							"label": "CPU",
+							"description": "CPUs of each node",
+							"type": "integer",
+							"default": 1,
+							"range": [
+								1,
+								2,
+								4,
+								8
+							],
+							"required": "yes"
+						},
+						{
+							"key": "memory",
+							"label": "Memory",
+							"description": "memory of each node (in MiB)",
+							"type": "integer",
+							"default": 2048,
+							"range": [
+								2048,
+								4096,
+								8192
+							],
+							"required": "yes"
+						},
+						{
+							"key": "instance_class",
+							"label": "Instance Class",
+							"description": "The instance type for the cluster to run, such as high performance, high performance plus",
+							"type": "integer",
+							"default": 0,
+							"range": [
+								0,
+								1
+							],
+							"required": "yes"
+						},
+						{
+							"key": "count",
+							"label": "Node Count",
+							"description": "Number of nodes for the cluster to create",
+							"type": "integer",
+							"default": 1,
+							"required": "yes"
+						},
+						{
+							"key": "volume_size",
+							"label": "Volume Size",
+							"description": "The volume size for this log server",
+							"type": "integer",
+							"default": 10,
+							"required": "no"
+						}
+					]
 				}			
 			]
 		},
@@ -141,6 +222,31 @@
 					"type": "string",
 					"default": "UTF-8",
 					"required": "yes"
+				},
+				{
+					"key": "tomcat_log_level",
+					"label": "Tomcat logging level",
+					"description": "The logging level of log4j within Tomcat scope, settting 'INFO' as default value",
+					"type": "string",
+					"default": "INFO",
+					"range": [
+						"OFF",
+						"FATAL",
+						"ERROR",
+						"WARN",
+						"INFO",
+						"DEBUG",
+						"ALL"
+					],
+					"required": "yes"
+				},
+				{
+					"key": "tomcat_log_packages",
+					"label": "Tomcat logging packages",
+					"description": "Packages to include in the logging, separated by comma. Tomcat defines loggers by Engine and Host names. For example: log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost],log4j.logger.org.apache.catalina.session",
+					"type": "string",
+					"default": "",
+					"required": "no"
 				},
 				{
 					"key": "threadpool_maxThreads",
@@ -188,34 +294,6 @@
 					"required": "yes"
 				},
 				{
-					"key": "redis_db",
-					"label": "Redis Database",
-					"description": "Whether to use Redis database to replicate session data",
-					"type": "boolean",
-					"default": false,
-					"range": [
-						true,
-						false
-					],
-					"required": "yes"
-				},
-				{
-					"key": "redis_db_host",
-					"label": "The IP address of Redis database",
-					"description": "The IP address of Redis database, leave empty if you choose not to use Redis database",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "redis_db_port",
-					"label": "The port of Redis database",
-					"description": "The port of Redis database, leave empty if you choose not to use Redis database",
-					"type": "string",
-					"default": "6379",
-					"required": "no"
-				},
-				{
 					"key": "redis_db_num",
 					"label": "Redis database number",
 					"description": "Redis Database Number, leave empty if you choose not to use Redis database",
@@ -226,7 +304,7 @@
 				{
 					"key": "access_key_id",
 					"label": "access_key_id",
-					"description": "access_key_id to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager or Jenkins",
+					"description": "access_key_id to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "",
@@ -235,7 +313,7 @@
 				{
 					"key": "secret_access_key",
 					"label": "secret_access_key",
-					"description": "secret_access_key to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager or Jenkins",
+					"description": "secret_access_key to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "password",
 					"changeable": true,
 					"default": "",
@@ -244,7 +322,7 @@
 				{
 					"key": "zone",
 					"label": "zone",
-					"description": "Zone of bucket for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager or Jenkins",
+					"description": "Zone of bucket for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "pek3a",
@@ -257,7 +335,7 @@
 				{
 					"key": "bucket",
 					"label": "bucket",
-					"description": "Bucket name for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager or Jenkins",
+					"description": "Bucket name for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"changeable": true,
 					"default": "",
@@ -266,54 +344,9 @@
 				{
 					"key": "war_name",
 					"label": "war name",
-					"description": "The web application(WAR) file Name, leave empty if you chooose to use Tomcat Manager or Jenkins",
+					"description": "The web application(WAR) file Name, leave empty if you chooose to use Tomcat Manager",
 					"type": "string",
 					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db",
-					"label": "MySql Database",
-					"description": "Whether to use MySql database for development",
-					"type": "boolean",
-					"default": false,
-					"range": [
-						true,
-						false
-					],
-					"required": "yes"
-				},
-				{
-					"key": "mysql_db_user",
-					"label": "User name of MySql database",
-					"description": "User name of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_pwd",
-					"label": "Password of MySql database",
-					"description": "Password of MySql database, leave empty if you choose not to use MySql database",
-					"type": "password",
-					"changeable": true,
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_host",
-					"label": "The IP address of MySql database",
-					"description": "The IP address of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_port",
-					"label": "The port of MySql database",
-					"description": "The port of MySql database, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "3306",
 					"required": "no"
 				},
 				{
@@ -322,6 +355,18 @@
 					"description": "MySql Database Name, leave empty if you choose not to use MySql database",
 					"type": "string",
 					"default": "mysql",
+					"required": "no"
+				},
+				{
+					"key": "mysql_ip_mode",
+					"label": "The mode of MySql IP address",
+					"description": "Choose to use MySQL reserved writing or reading IP address, using writable IP as default value",
+					"type": "string",
+					"default": "write_ip",
+					"range": [
+						"write_ip",
+						"read_ip"
+					],
 					"required": "no"
 				},
 				{

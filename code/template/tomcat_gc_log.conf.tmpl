@@ -1,0 +1,17 @@
+$ModLoad imfile
+$InputFilePollInterval 10
+$WorkDirectory /var/log/tomcat
+
+$template BiglogFormatTomcat,"%msg%\n"
+
+$InputFileName /opt/apache-tomcat-7.0.78/logs/tomcat_gc.log
+$InputFileTag activitycenter:
+$InputFileStateFile stat-file1
+$InputFileSeverity info
+$InputFileFacility local6
+$InputFilePersistStateInterval 20000
+$RepeatedMsgReduction off
+$InputRunFileMonitor
+{{range $dir := lsdir "/hosts/log_node/"}}{{$log_node_ip := printf "/hosts/log_node/%s/ip" $dir}}
+local6.* @{{getv $log_node_ip}}:514;BiglogFormatTomcat
+{{end}}

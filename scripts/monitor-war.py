@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import re
 import os.path
 import pyinotify
@@ -31,7 +33,13 @@ class EventHandler(pyinotify.ProcessEvent):
         print folder_name
         if (not chang_name.match(path_name)) and (folder_name.find('/') == -1):
             if (os.path.exists(tomcat_base + folder_name + '.war')) and (os.path.isdir(tomcat_base + folder_name)):
-                shutil.copy2(tomcat_base + folder_name + '.war', tomcat_listen + folder_name + '.war')
+                if (not os.path.exists(tomcat_listen + folder_name + '.war')):
+                    shutil.copy2(tomcat_base + folder_name + '.war', tomcat_listen + folder_name + '.war')
+                else:
+                    src_war_version = subprocess.check_output("unzip -q -c " + tomcat_base + folder_name + ".war" + " META-INF/MANIFEST.MF | grep 'Manifest-Version' | cut -d ':' -f 2", shell=True)
+                    dest_war_version = subprocess.check_output("unzip -q -c " + tomcat_listen + folder_name + ".war" + " META-INF/MANIFEST.MF | grep 'Manifest-Version' | cut -d ':' -f 2", shell=True)
+                    if (src_war_version != dest_war_version):
+                        shutil.copy2(tomcat_base + folder_name + '.war', tomcat_listen + folder_name + '.war')
             else:
                 if (not os.path.exists(tomcat_base + folder_name)) and (os.path.exists(tomcat_listen + folder_name + '.war')):
                     os.remove(tomcat_listen + folder_name + '.war');

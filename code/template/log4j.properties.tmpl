@@ -1,0 +1,56 @@
+{{$tomcat_log_level :=getv "/env/tomcat_log_level"}}
+{{$tomcat_log_packages :=getv "/env/tomcat_log_packages"}}
+{{range $dir := lsdir "/hosts/log_node/"}}{{$log_node_ip := printf "/hosts/log_node/%s/ip" $dir}}
+log4j.rootLogger = {{$tomcat_log_level}}, CATALINA, LOCALHOST, MANAGER, HOST-MANAGER, SYSLOG
+
+# Define all the appenders
+log4j.appender.CATALINA = org.apache.log4j.net.SyslogAppender
+log4j.appender.CATALINA.syslogHost = {{getv $log_node_ip}}
+log4j.appender.CATALINA.Facility = local1
+log4j.appender.CATALINA.FacilityPrinting = true
+log4j.appender.CATALINA.layout = org.apache.log4j.PatternLayout
+log4j.appender.CATALINA.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+
+log4j.appender.LOCALHOST = org.apache.log4j.net.SyslogAppender
+log4j.appender.LOCALHOST.syslogHost = {{getv $log_node_ip}}
+log4j.appender.LOCALHOST.Facility = local2
+log4j.appender.LOCALHOST.FacilityPrinting = true
+log4j.appender.LOCALHOST.layout = org.apache.log4j.PatternLayout
+log4j.appender.LOCALHOST.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+
+log4j.appender.MANAGER = org.apache.log4j.net.SyslogAppender
+log4j.appender.MANAGER.syslogHost = {{getv $log_node_ip}}
+log4j.appender.MANAGER.Facility = local3
+log4j.appender.MANAGER.FacilityPrinting = true
+log4j.appender.MANAGER.layout = org.apache.log4j.PatternLayout
+log4j.appender.MANAGER.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+
+log4j.appender.HOST-MANAGER = org.apache.log4j.net.SyslogAppender
+log4j.appender.HOST-MANAGER.syslogHost = {{getv $log_node_ip}}
+log4j.appender.HOST-MANAGER.Facility = local4
+log4j.appender.HOST-MANAGER.FacilityPrinting = true
+log4j.appender.HOST-MANAGER.layout = org.apache.log4j.PatternLayout
+log4j.appender.HOST-MANAGER.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+
+#log4j.appender.CONSOLE = org.apache.log4j.ConsoleAppender
+#log4j.appender.CONSOLE.Encoding = UTF-8
+#log4j.appender.CONSOLE.layout = org.apache.log4j.PatternLayout
+#log4j.appender.CONSOLE.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+
+log4j.appender.SYSLOG = org.apache.log4j.net.SyslogAppender
+log4j.appender.SYSLOG.syslogHost = {{getv $log_node_ip}}
+log4j.appender.SYSLOG.layout = org.apache.log4j.PatternLayout
+log4j.appender.SYSLOG.layout.ConversionPattern = %d [%t] %-5p %c- %m%n
+log4j.appender.SYSLOG.Facility = local5
+{{end}}
+# Configure which loggers log to which appenders
+log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost]={{$tomcat_log_level}},LOCALHOST, SYSLOG
+log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager]={{$tomcat_log_level}}, MANAGER, SYSLOG
+log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager]={{$tomcat_log_level}},HOST-MANAGER, SYSLOG
+
+{{if gt ( len ( $tomcat_log_packages ) ) 0}}
+{{$package_names := split $tomcat_log_packages ","}}
+{{range  $index, $package := $package_names}}
+{{$package}}={{$tomcat_log_level}}, SYSLOG
+{{end}}
+{{end}}

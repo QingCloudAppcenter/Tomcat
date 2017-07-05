@@ -2,13 +2,18 @@
      "name": {{cluster.name}},
      "description": {{cluster.description}},
      "vxnet": {{cluster.vxnet}},
+     "links": {
+         "redis_service": {{cluster.redis_service}},
+         "mysql_service": {{cluster.mysql_service}}
+     },
+     "add_links": ["redis_service","mysql_service"],
      "nodes": [
          {
              "role": "tomcat_nodes",
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-aep5avrw"
+                 "image": "img-e06bvm3w"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -17,17 +22,17 @@
              "memory": {{cluster.tomcat_nodes.memory}},
              "volume": {
                 "size": {{cluster.tomcat_nodes.volume_size}},
-                "mount_point": "/var/www/upload_cache",
+                "mount_point": "/var/tomcat",
                 "mount_options": "noatime,nodev,nosuid",
                 "filesystem": "ext4"
             },
              "vertical_scaling_policy": "sequential",
              "services": {
              	 "init": {
-             	 	"cmd": "/opt/apache-tomcat-7.0.78/bin/get-war.sh"
+             	 	"cmd": "systemctl restart rsyslog;/opt/apache-tomcat-7.0.78/bin/get-war.sh"
              	 },
                  "start": {
-                    "cmd": "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+                    "cmd": "systemctl restart rsyslog;/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
                  },
                  "restart": {
                    "cmd": "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
@@ -127,32 +132,57 @@
             },
              "user_access": true,
              "advanced_actions": ["scale_horizontal"]
-         }     
+         },
+         {
+             "role": "log_node",
+             "container": {
+                 "type": "kvm",
+                 "zone": "pek3a",
+                 "image": "img-9ncklr21"
+             },
+             "instance_class": {{cluster.log_node.instance_class}},
+             "count": {{cluster.log_node.count}},
+             "cpu": {{cluster.log_node.cpu}},
+             "memory": {{cluster.log_node.memory}},
+             "volume": {
+                "size": {{cluster.log_node.volume_size}},
+                "mount_point": "/var/tomcat_log",
+                "mount_options": "noatime,nodev,nosuid",
+                "filesystem": "ext4"
+             },
+             "services": {
+                 "start": {
+                    "cmd": "systemctl start rsyslog"
+                 },
+                 "restart": {
+                   "cmd": "systemctl restart rsyslog"
+                 },
+                 "stop": {
+                     "cmd": "systemctl stop rsyslog"
+                 }
+             },
+             "user_access": true
+         }    
      ],
      "env": {
          "tomcat_user": {{env.tomcat_user}},
          "tomcat_pwd": {{env.tomcat_pwd}},
          "tomcat_encoding": {{env.tomcat_encoding}},
+         "tomcat_log_level": {{env.tomcat_log_level}},
+         "tomcat_log_packages": {{env.tomcat_log_packages}},
          "threadpool_maxThreads": {{env.threadpool_maxThreads}},
          "threadpool_minSpareThreads": {{env.threadpool_minSpareThreads}},
          "threadpool_maxIdleTime": {{env.threadpool_maxIdleTime}},
          "java_opts": {{env.java_opts}},
          "war_source": {{env.war_source}},
-     	 "redis_db": {{env.redis_db}},
-     	 "redis_db_host": {{env.redis_db_host}},
-     	 "redis_db_port": {{env.redis_db_port}},
      	 "redis_db_num": {{env.redis_db_num}},
          "qingstor_access_key_id": {{env.access_key_id}},
          "qingstor_secret_access_key": {{env.secret_access_key}},
          "qingstor_zone": {{env.zone}},
          "qingstor_bucket": {{env.bucket}},
          "qingstor_war_name": {{env.war_name}},
-         "mysql_db": {{env.mysql_db}},
-         "mysql_db_user": {{env.mysql_db_user}},
-         "mysql_db_pwd": {{env.mysql_db_pwd}},
-     	 "mysql_db_host": {{env.mysql_db_host}},
-     	 "mysql_db_port": {{env.mysql_db_port}},
      	 "mysql_db_name": {{env.mysql_db_name}},
+         "mysql_ip_mode": {{env.mysql_ip_mode}},
          "jdbc_dsname": {{env.jdbc_dsname}},
          "jdbc_maxActive": {{env.jdbc_maxActive}},
          "jdbc_maxIdle": {{env.jdbc_maxIdle}},
