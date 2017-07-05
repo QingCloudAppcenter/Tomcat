@@ -1,0 +1,4 @@
+#!/bin/bash
+{{range $dir := lsdir "/hosts/tomcat_nodes/"}}{{$tomcat_node_ip := printf "/hosts/tomcat_nodes/%s/ip" $dir}}
+echo "{{getv $tomcat_node_ip}}    {{$dir}}">>/etc/hosts
+{{end}}

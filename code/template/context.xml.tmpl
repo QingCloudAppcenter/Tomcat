@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 <!-- The contents of this file will be loaded for each web application -->
-<Context>
+<Context swallowOutput="true">
 
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
@@ -25,16 +25,17 @@
     <!--
     <Manager pathname="" />
     -->
+    {{$jdbc_dsname :=getv "/env/jdbc_dsname"}}
+    {{$jdbc_maxActive :=getv "/env/jdbc_maxActive"}}
+    {{$jdbc_maxIdle :=getv "/env/jdbc_maxIdle"}}
+    {{$jdbc_maxWait :=getv "/env/jdbc_maxWait"}}
 
-	{{$redis_enable := getv "/env/redis_db"}}
-	{{$redis_host :=getv "/env/redis_db_host"}}
-	{{$redis_port :=getv "/env/redis_db_port"}}
-	{{$redis_dbnum :=getv "/env/redis_db_num"}}
-	{{if eq $redis_enable "true"}}
+	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}
 	<Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
 	<Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
          host="{{$redis_host}}"
          port="{{$redis_port}}"
+         {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
          database="{{$redis_dbnum}}"
          maxInactiveInterval="60"/>
     {{else}}	
@@ -43,17 +44,11 @@
                    notifyListenersOnReplication="true"/>
 	{{end}}
 	
-	{{$mysql_enable := getv "/env/mysql_db"}}
-	{{$mysql_user :=getv "/env/mysql_db_user"}}
-	{{$mysql_pwd :=getv "/env/mysql_db_pwd"}}
-	{{$mysql_host :=getv "/env/mysql_db_host"}}
-	{{$mysql_port :=getv "/env/mysql_db_port"}}
-	{{$mysql_db :=getv "/env/mysql_db_name"}}
-	{{if eq $mysql_enable "true"}}
-    <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
-               maxActive="100" maxIdle="30" maxWait="10000"
+	{{if exists "/links/mysql_service/cluster/cluster_id"}}{{$mysql_db :=getv "/env/mysql_db_name"}}{{$mysql_user :=getv "/links/mysql_service/env/user"}}{{$mysql_pwd :=getv "/links/mysql_service/env/passwd"}}{{$mysql_mode :=getv "/env/mysql_ip_mode"}}{{$mysql_write_host :=getv "/links/mysql_service/cluster/endpoints/reserved_ips/write_vip/value"}}{{$mysql_read_host :=getv "/links/mysql_service/cluster/endpoints/reserved_ips/read_vip/value"}}{{$mysql_port :=getv "/links/mysql_service/cluster/endpoints/client_port/port"}}
+    <Resource name="jdbc/{{$jdbc_dsname}}" auth="Container" type="javax.sql.DataSource"
+               maxActive="{{$jdbc_maxActive}}" maxIdle="{{$jdbc_maxIdle}}" maxWait="{{$jdbc_maxWait}}"
                username="{{$mysql_user}}" password="{{$mysql_pwd}}" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://{{$mysql_host}}:{{$mysql_port}}/{{$mysql_db}}"/>
+               url="jdbc:mysql://{{if eq $mysql_mode "write_ip"}}{{$mysql_write_host}}{{else}}{{$mysql_read_host}}{{end}}:{{$mysql_port}}/{{$mysql_db}}"/>
 	{{end}}
     <!-- Uncomment this to enable Comet connection tacking (provides events
          on session expiration as well as webapp lifecycle) -->

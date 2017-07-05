@@ -1,0 +1,7 @@
+[template]
+src = "setenv.sh.tmpl"
+dest = "/opt/apache-tomcat-7.0.78/bin/setenv.sh"
+keys = [
+    "/",
+]
+reload_cmd = "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
