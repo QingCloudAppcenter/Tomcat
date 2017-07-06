@@ -33,7 +33,7 @@
 				{
 					"key": "redis_service",
 					"label": "Redis",
-					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it. ",
+					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it",
 					"type": "service",
 					"tag": ["Redis", "redis"],
 					"default": "",
