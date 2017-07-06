@@ -17,12 +17,12 @@ tar -xvf tomcat_app.tar.gz -C /opt/tomcat_app
 rm -rf tomcat_app.tar.gz
 
 echo "modify the max notify limit"
-mv /etc/sysctl.d/max-users-watch.conf /etc/sysctl.d/max-users-watch.conf_bak
+#mv /etc/sysctl.d/max-users-watch.conf /etc/sysctl.d/max-users-watch.conf_bak
 cp /opt/tomcat_app/installpackages/max-users-watch.conf /etc/sysctl.d
 sysctl --system
 
 echo "modify ulimit"
-mv /etc/securitylimits.conf /etc/securitylimits.conf_bak
+mv /etc/security/limits.conf /etc/security/limits.conf_bak
 cp /opt/tomcat_app/installpackages/limits.conf /etc/security
 
 echo "install zip unzip"
@@ -33,7 +33,7 @@ yum -y install net-tools
 
 
 # tomcat node
-if [ $node_type == "tomcat"]
+if [ $node_type == "tomcat" ]
 then
     echo "install wget"
     yum -y install wget
@@ -87,7 +87,7 @@ then
 fi
 
 # log server node
-if [ $node_type == "log"]
+if [ $node_type == "log" ]
 then 
     cd /opt
     mv /etc/rsyslog.conf /etc/rsyslog.conf_bak
