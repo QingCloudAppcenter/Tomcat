@@ -1,7 +1,0 @@
-[template]
-src = "tomcat_gc_log.conf.tmpl"
-dest = "/etc/rsyslog.d/tomcat_gc_log.conf"
-keys = [
-    "/",
-]
-reload_cmd = "systemctl restart rsyslog"
