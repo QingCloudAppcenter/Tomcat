@@ -132,7 +132,7 @@ done
 # Get standard environment variables
 PRGDIR=`dirname "$PRG"`
 CATALINA_HOME=/opt/apache-tomcat-7.0.78
-CATALINA_OPTS="-XX:+PrintGCDateStamps -Xloggc:/Users/calvin/Qing/apache-tomcat-7.0.78/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
+CATALINA_OPTS="-XX:+PrintGCDateStamps -Xloggc:/opt/apache-tomcat-7.0.78/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
 # Only set CATALINA_HOME if not already set
 [ -z "$CATALINA_HOME" ] && CATALINA_HOME=`cd "$PRGDIR/.." >/dev/null; pwd`
 
