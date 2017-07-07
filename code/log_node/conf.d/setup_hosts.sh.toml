@@ -4,3 +4,4 @@ dest = "/opt/setup_hosts.sh"
 keys = [
     "/",
 ]
+reload_cmd = "/opt/setup_hosts.sh"
