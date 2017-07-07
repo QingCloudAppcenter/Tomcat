@@ -152,7 +152,7 @@
              },
              "services": {
              	 "init": {
-             	 	"cmd": "/opt/setup_hosts.sh;systemctl restart rsyslog"
+             	 	"cmd": "chmod +x /opt/setup_hosts.sh;/opt/setup_hosts.sh;systemctl restart rsyslog"
              	 },
                  "start": {
                     "cmd": "systemctl start rsyslog"
