@@ -36,6 +36,9 @@
 					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it",
 					"type": "service",
 					"tag": ["Redis", "redis"],
+                    "limits": {
+                        "app-zydumbxo": ["appv-q1uwklp7"]
+                    },
 					"default": "",
 					"required": "no"
 				},
@@ -45,6 +48,9 @@
 					"description": "Choose a MySql to use and related MySql infomation in service properties section below, leave empty if you choose not to use it",
 					"type": "service",
 					"tag": ["MySql", "mysql"],
+                    "limits": {
+                        "app-00r26u27": ["appv-le9cpyc6"]
+                    },
 					"default": "",
 					"required": "no"
 				},
