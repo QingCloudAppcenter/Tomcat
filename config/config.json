@@ -206,16 +206,16 @@
 			"properties": [
 				{
 					"key": "tomcat_user",
-					"label": "User name to manage Tomcat",
-					"description": "User name to manage Tomcat",
+					"label": "User name to access Tomcat manager GUI",
+					"description": "User name to access Tomcat manager GUI",
 					"type": "string",
 					"default": "qingAdmin",
 					"required": "yes"
 				},
 				{
 					"key": "tomcat_pwd",
-					"label": "Password of Tomcat user",
-					"description": "Password of Tomcat user, the default password is 'qing0pwd'",
+					"label": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script'",
+					"description": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script', the default password is 'qing0pwd'",
 					"type": "password",
 					"changeable": true,
 					"default": "qing0pwd",

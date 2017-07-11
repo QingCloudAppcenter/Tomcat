@@ -13,7 +13,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-brrujrx0"
+                 "image": "img-zndyjbje"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -86,7 +86,7 @@
                     "ajp_requestCount": {
                         "unit": "count",
                         "value_type": "int",
-                        "statistics_type": "latest",
+                        "statistics_type": "delta",
                         "scale_factor_when_display": 1
                     },
                     "http_connector": {
@@ -116,7 +116,7 @@
                     "http_requestCount": {
                         "unit": "count",
                         "value_type": "int",
-                        "statistics_type": "latest",
+                        "statistics_type": "delta",
                         "scale_factor_when_display": 1
                     }
                 },
