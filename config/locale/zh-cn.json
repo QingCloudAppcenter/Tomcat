@@ -73,16 +73,18 @@
     "ajp_connector": "AJP 连接器",
     "ajp_currentThreadCount": "AJP 连接器当前线程数",
     "ajp_currentThreadsBusy": "AJP 连接器当前繁忙的线程数",
-    "ajp_maxTime": "AJP 连接器下请求的最长处理时间，单位毫秒",
+    "ajp_maxTime": "AJP 连接器下请求的最长处理时间",
     "ajp_requestCount": "AJP 连接器下的请求数",
     "http_connector": "http 连接器",
     "http_currentThreadCount": "http 连接器当前线程数",
     "http_currentThreadsBusy": "http 连接器当前繁忙的线程数",
-    "http_maxTime": "http 连接器下请求的最长处理时间，单位毫秒",
-    "http_requestCount": "http 连接器下请求的最长处理时间，单位毫秒",
+    "http_maxTime": "http 连接器下请求的最长处理时间",
+    "http_requestCount": "http 连接器下请求的最长处理时间",
     "connector": "连接器",
     "currentThreadCount": "当前线程数",
     "currentThreadsBusy": "当前繁忙的线程数",
-    "maxTime": "请求的最长处理时间，单位毫秒",
-    "requestCount": "请求数"
+    "maxTime": "请求的最长处理时间",
+    "requestCount": "请求数",
+    "ms": "毫秒",
+    "count": "数量"
 }

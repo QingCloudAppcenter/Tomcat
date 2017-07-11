@@ -73,16 +73,18 @@
     "ajp_connector": "AJP connector",
     "ajp_currentThreadCount": "Current thread count of AJP connector",
     "ajp_currentThreadsBusy": "Current busy thread count of AJP connector",
-    "ajp_maxTime": "The max request processing time of AJP connector, the unit is millisecond",
+    "ajp_maxTime": "The max request processing time of AJP connector",
     "ajp_requestCount": "Requst count of AJP connector",
     "http_connector": "http connector",
     "http_currentThreadCount": "Current thread count of http connector",
     "http_currentThreadsBusy": "Current busy thread count of http connector",
-    "http_maxTime": "The max request processing time of http connector, the unit is millisecond",
+    "http_maxTime": "The max request processing time of http connector",
     "http_requestCount": "Requst count of http connector",
     "connector": "connector",
     "currentThreadCount": "Current thread count",
     "currentThreadsBusy": "Current busy thread count",
-    "maxTime": "The max request processing time, the unit is millisecond",
-    "requestCount": "Requst count"
+    "maxTime": "The max request processing time",
+    "requestCount": "Requst count",
+    "ms": "ms",
+    "count": "count"
 }
