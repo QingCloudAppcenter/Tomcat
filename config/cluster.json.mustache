@@ -6,14 +6,13 @@
          "redis_service": {{cluster.redis_service}},
          "mysql_service": {{cluster.mysql_service}}
      },
-     "add_links": ["redis_service","mysql_service"],
      "nodes": [
          {
              "role": "tomcat_nodes",
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-zndyjbje"
+                 "image": "img-ybhaulzb"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -131,14 +130,14 @@
                 "alarm": ["ajp_currentThreadsBusy", "http_currentThreadsBusy"]
             },
              "user_access": true,
-             "advanced_actions": ["scale_horizontal"]
+             "advanced_actions": ["change_vxnet","scale_horizontal"]
          },
          {
              "role": "log_node",
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-x37gycsn"
+                 "image": "img-c6n07qhm"
              },
              "instance_class": {{cluster.log_node.instance_class}},
              "count": {{cluster.log_node.count}},
@@ -164,7 +163,8 @@
                      "cmd": "systemctl stop rsyslog"
                  }
              },
-             "user_access": true
+             "user_access": true,
+             "advanced_actions": ["change_vxnet"]
          }    
      ],
      "env": {
