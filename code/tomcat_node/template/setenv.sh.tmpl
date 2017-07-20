@@ -1,4 +1,15 @@
 #!/bin/bash
+tomcat_war_temp="/tmp/war-temp"
+tomcat_war_listen="/tmp/war-listen"
+if [ ! -d $tomcat_war_temp ]
+then
+  mkdir $tomcat_war_temp
+fi
+
+if [ ! -d $tomcat_war_listen ]
+then
+  mkdir $tomcat_war_listen
+fi
 #export JAVA_OPTS="-Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -Xms512m -Xmx1024m -XX:NewRatio=1 -XX:ReservedCodeCacheSize=128m"
 export JAVA_OPTS="-Djavax.servlet.request.encoding=UTF-8 -Dfile.encoding=UTF-8 -Xms512m -Xmx1024m -XX:NewRatio=1 -XX:ReservedCodeCacheSize=128m"
 
