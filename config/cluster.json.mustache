@@ -12,7 +12,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-ybhaulzb"
+                 "image": "img-jssduxq9"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -137,7 +137,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-c6n07qhm"
+                 "image": "img-5yyheepi"
              },
              "instance_class": {{cluster.log_node.instance_class}},
              "count": {{cluster.log_node.count}},
@@ -145,7 +145,7 @@
              "memory": {{cluster.log_node.memory}},
              "volume": {
                 "size": {{cluster.log_node.volume_size}},
-                "mount_point": "/var/tomcat_log",
+                "mount_point": "/data/TomcatLogData",
                 "mount_options": "noatime,nodev,nosuid",
                 "filesystem": "ext4"
              },

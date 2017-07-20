@@ -1,4 +1,9 @@
 #!/bin/bash
+log_data="/data/TomcatLogData"
+if [ ! -d $log_data ]
+then
+  mkdir $log_data
+fi
 {{range $dir := lsdir "/hosts/tomcat_nodes/"}}{{$tomcat_node_ip := printf "/hosts/tomcat_nodes/%s/ip" $dir}}
 sed -i '/{{getv $tomcat_node_ip}}/d' /etc/hosts
 echo "{{getv $tomcat_node_ip}}    {{$dir}}">>/etc/hosts
