@@ -116,7 +116,7 @@
                resourceName="UserDatabase"/>
       </Realm>
 
-      <Host name="localhost"  appBase="webapps"
+      <Host name="localhost"  appBase="/data/webapps"
             unpackWARs="true" autoDeploy="true">
 
         <!-- SingleSignOn valve, share authentication between web applications
@@ -168,9 +168,9 @@
 	          <ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener"/>
 	      {{end}}
 	          <Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer"
-	                    tempDir="/tmp/war-temp/"
-	                    deployDir="webapps"
-	                    watchDir="/tmp/war-listen/"
+	                    tempDir="/data/war-temp/"
+	                    deployDir="/data/webapps"
+	                    watchDir="/data/war-listen/"
 	                    watchEnabled="true"/>
 	      </Cluster>
       </Host>
