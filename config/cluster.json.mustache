@@ -12,7 +12,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-q7ei5dp3"
+                 "image": "img-h73eih5e"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -39,18 +39,18 @@
                  "stop": {
                      "cmd": "/opt/apache-tomcat-7.0.78/bin/stop-server.sh"
                  },
-                 "redeploy": {
+                 "redeploy WAR for QingStor": {
                  	 "type": "custom",
                      "cmd": "/opt/apache-tomcat-7.0.78/bin/get-war.sh"
                  }
              },
             "health_check": {
                 "enable": true,
-                "interval_sec": 120,
+                "interval_sec": 60,
                 "timeout_sec": 60,
                 "action_timeout_sec": 60,
-                "healthy_threshold": 5,
-                "unhealthy_threshold": 5,
+                "healthy_threshold": 3,
+                "unhealthy_threshold": 3,
                 "check_cmd": "/opt/apache-tomcat-7.0.78/bin/serverStatus.sh",
                 "action_cmd": "/opt/apache-tomcat-7.0.78/bin/recheck-health.sh"
             },
@@ -129,14 +129,14 @@
                 "display": ["connector", "currentThreadCount", "currentThreadsBusy", "maxTime", "requestCount"],
                 "alarm": ["ajp_currentThreadsBusy", "http_currentThreadsBusy"]
             },
-             "advanced_actions": ["change_vxnet","scale_horizontal"]
+             "advanced_actions": ["scale_horizontal"]
          },
          {
              "role": "log_node",
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-5yyheepi"
+                 "image": "img-b5urfv9t"
              },
              "instance_class": {{cluster.log_node.instance_class}},
              "count": 1,
@@ -162,8 +162,7 @@
                      "cmd": "systemctl stop rsyslog"
                  }
              },
-             "user_access": true,
-             "advanced_actions": ["change_vxnet"]
+             "user_access": true
          }    
      ],
      "env": {
@@ -184,7 +183,7 @@
          "qingstor_bucket": {{env.bucket}},
          "qingstor_war_name": {{env.war_name}},
      	 "mysql_db_name": {{env.mysql_db_name}},
-         "mysql_ip_mode": {{env.mysql_ip_mode}},
+         "mysql_ip_mode": "write_ip",
          "jdbc_dsname": {{env.jdbc_dsname}},
          "jdbc_maxActive": {{env.jdbc_maxActive}},
          "jdbc_maxIdle": {{env.jdbc_maxIdle}},

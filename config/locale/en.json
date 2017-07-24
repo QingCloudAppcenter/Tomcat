@@ -70,7 +70,7 @@
     "The maximum number of database connections that should be kept in the pool at all times": "The maximum number of database connections that should be kept in the pool at all times",
     "The maximum number of milliseconds before a database connection timeout": "The maximum number of milliseconds before a database connection timeout",
     "The maximum number of milliseconds that the pool will wait (when there are no available connections) for a database connection to be returned before throwing an exception": "The maximum number of milliseconds that the pool will wait (when there are no available connections) for a database connection to be returned before throwing an exception",
-    "redeploy": "redeploy",
+    "redeploy WAR for QingStor": "redeploy WAR for QingStor",
     "ajp_connector": "AJP connector",
     "ajp_currentThreadCount": "Current thread count of AJP connector",
     "ajp_currentThreadsBusy": "Current busy thread count of AJP connector",

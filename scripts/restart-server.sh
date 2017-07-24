@@ -1,7 +1,11 @@
 #! /bin/bash
 /opt/apache-tomcat-7.0.78/bin/check-multicast.sh
-/opt/apache-tomcat-7.0.78/bin/serverStatus.sh
 /opt/apache-tomcat-7.0.78/bin/get-war.sh
+if [ ! -d "/data/webapps" ]
+then
+  exit 0
+fi
+/opt/apache-tomcat-7.0.78/bin/serverStatus.sh
 #echo $?
 serverStatus=$?
 if [ $serverStatus == "0" ]
