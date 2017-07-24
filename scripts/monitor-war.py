@@ -5,8 +5,8 @@ import os.path
 import pyinotify
 import shutil
 
-tomcat_base = '/opt/apache-tomcat-7.0.78/webapps/'
-tomcat_listen = '/tmp/war-listen/'
+tomcat_base = '/data/webapps/'
+tomcat_listen = '/data/war-listen/'
 watchmgr = pyinotify.WatchManager()
 # 
 mask = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY# | pyinotify.IN_CLOSE_WRITE
@@ -49,6 +49,6 @@ handler = EventHandler()
 
 notifier = pyinotify.Notifier(watchmgr, handler)
 
-wdd = watchmgr.add_watch('/opt/apache-tomcat-7.0.78/webapps', mask, rec=True, auto_add=True)
+wdd = watchmgr.add_watch('/data/webapps', mask, rec=True, auto_add=True)
 
 notifier.loop()

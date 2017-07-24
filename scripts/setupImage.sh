@@ -35,6 +35,9 @@ yum -y install net-tools
 # tomcat node
 if [ $node_type == "tomcat" ]
 then
+    echo "instal rsync"
+    yum install -y rsync
+
     echo "install wget"
     yum -y install wget
 

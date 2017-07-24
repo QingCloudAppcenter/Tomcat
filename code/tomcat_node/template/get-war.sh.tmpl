@@ -5,8 +5,14 @@
 {{$war_name :=getv "/env/qingstor_war_name"}}
 # only download war when qingStor is enabled
 {{if eq $war_source "qingstor"}}
-qsctl cp -f qs://{{$bucket}}/{{$war_name}} /tmp/war-listen/
+qsctl cp -f qs://{{$bucket}}/{{$war_name}} /data/war-listen/
 {{else if eq $war_source "tomcat_manager"}}
+process_status=$(ps -ef | grep -v grep | grep 'monitor-war.py')
+#echo $process_status
+if [ "$process_status" != "" ]
+then
+    ps -ef|grep 'monitor-war.py' |grep -v grep|cut -c 9-15|xargs kill -9
+fi
 python /opt/apache-tomcat-7.0.78/bin/monitor-war.py &
 {{else}}
 exit 0

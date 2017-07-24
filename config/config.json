@@ -87,7 +87,7 @@
 						{
 							"key": "memory",
 							"label": "Memory",
-							"description": "memory of each node (in MiB)",
+							"description": "memory of each node",
 							"type": "integer",
 							"default": 2048,
 							"range": [
@@ -161,7 +161,7 @@
 						{
 							"key": "memory",
 							"label": "Memory",
-							"description": "memory of each node (in MiB)",
+							"description": "memory of each node",
 							"type": "integer",
 							"default": 2048,
 							"range": [
@@ -184,14 +184,6 @@
 							"required": "yes"
 						},
 						{
-							"key": "count",
-							"label": "Node Count",
-							"description": "Number of nodes for the cluster to create",
-							"type": "integer",
-							"default": 1,
-							"required": "yes"
-						},
-						{
 							"key": "volume_size",
 							"label": "Volume Size",
 							"description": "The volume size for this log server",
@@ -211,14 +203,15 @@
 				{
 					"key": "tomcat_user",
 					"label": "User name to access Tomcat manager GUI",
-					"description": "User name to access Tomcat manager GUI",
+					"description": "User name to access Tomcat manager GUI, avoid to set it as 'tomcat' because it's already predefined with role 'manager_script'",
 					"type": "string",
 					"default": "qingAdmin",
+					"pattern": "^(?!.*?[tT][oO][mM][cC][aA][tT]).*$",
 					"required": "yes"
 				},
 				{
 					"key": "tomcat_pwd",
-					"label": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script'",
+					"label": "Password to access Tomcat manager",
 					"description": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script', the default password is 'qing0pwd'",
 					"type": "password",
 					"changeable": true,
