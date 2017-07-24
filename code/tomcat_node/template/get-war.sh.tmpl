@@ -1,5 +1,8 @@
 #! /bin/bash
-
+if [ ! -d "/data/webapps" ]
+then
+  exit 0
+fi
 {{$war_source :=getv "/env/war_source"}}
 {{$bucket :=getv "/env/qingstor_bucket"}}
 {{$war_name :=getv "/env/qingstor_war_name"}}

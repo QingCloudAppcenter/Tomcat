@@ -361,18 +361,6 @@
 					"required": "no"
 				},
 				{
-					"key": "mysql_ip_mode",
-					"label": "The mode of MySql IP address",
-					"description": "Choose to use MySQL reserved writing or reading IP address, using writable IP as default value",
-					"type": "string",
-					"default": "write_ip",
-					"range": [
-						"write_ip",
-						"read_ip"
-					],
-					"required": "no"
-				},
-				{
 					"key": "jdbc_dsname",
 					"label": "Datasoure name of Tomcat JDBC connection pool",
 					"description": "Datasoure name of Tomcat JDBC connection pool to connect MySql database",

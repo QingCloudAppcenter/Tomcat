@@ -1,6 +1,10 @@
 #!/bin/bash
 tomcat_war_temp="/data/war-temp"
 tomcat_war_listen="/data/war-listen"
+if [ ! -d "/data/webapps" ]
+then
+  exit 0
+fi
 if [ ! -d $tomcat_war_temp ]
 then
   mkdir $tomcat_war_temp
@@ -25,5 +29,5 @@ if [ -n "$self_java_opts" ]
 then
 	export JAVA_OPTS="{{$java_opts}}"
 else
-    export JAVA_OPTS="-Djavax.servlet.request.encoding={{$tomcat_encoding}} -Dfile.encoding={{$tomcat_encoding}} -Xms"$jvm_xms"m -Xmx"$jvm_xmx"m -XX:NewRatio=1 -XX:ReservedCodeCacheSize=128m"
+    export JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djavax.servlet.request.encoding={{$tomcat_encoding}} -Dfile.encoding={{$tomcat_encoding}} -Xms"$jvm_xms"m -Xmx"$jvm_xmx"m -XX:NewRatio=1 -XX:ReservedCodeCacheSize=128m"
 fi
