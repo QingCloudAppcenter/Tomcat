@@ -26,6 +26,9 @@
     "Log server to collect all log files from all Tomcat nodes": "日志服务器，收集存储从各个 Tomcat 节点收集的日志",
     "The volume size for this log server": "日志服务器上磁盘的大小",
     "Tomcat cluster service properties": "Tomcat 集群服务参数",
+    "Version of Java": "Java 版本",
+    "Choose proper Java version to run Tomcat, NOTE: Tomcat 9.x only supports Java 8&9": "选择合适的 Java 版本，注意：Tomcat 9.x 只支持 Java 8 和 9",
+    "Version of Tomcat": "Tomcat 版本",
     "User name to access Tomcat manager GUI": "访问 Tomcat 管理员图形界面的用户名",
     "User name to access Tomcat manager GUI, avoid to set it as 'tomcat' because it's already predefined with role 'manager_script'": "访问 Tomcat 管理员图形界面的用户名，请不要使用 'tomcat' 作为用户名，因为它已被预定义且与 'manager_script' 角色关联",
     "Password to access Tomcat manager": "访问 Tomcat 管理员服务的密码",
@@ -87,5 +90,8 @@
     "maxTime": "请求的最长处理时间",
     "requestCount": "请求数",
     "ms": "毫秒",
-    "count": "数量"
+    "count": "数量",
+    "err_code101": "Tomcat 9 不支持 Java 7",
+    "err_code102": "无法从 metadata 获取 Java 版本",
+    "err_code103": "无法从 metadata 获取 Tomcat 版本"
 }

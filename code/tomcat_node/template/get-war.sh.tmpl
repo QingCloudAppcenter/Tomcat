@@ -16,7 +16,7 @@ if [ "$process_status" != "" ]
 then
     ps -ef|grep 'monitor-war.py' |grep -v grep|cut -c 9-15|xargs kill -9
 fi
-python /opt/apache-tomcat-7.0.78/bin/monitor-war.py &
+python /opt/apache-tomcat/bin/monitor-war.py &
 {{else}}
 exit 0
 {{end}}
