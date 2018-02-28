@@ -1,7 +1,7 @@
 [template]
 src = "log4j.properties.tmpl"
-dest = "/opt/apache-tomcat-7.0.78/lib/log4j.properties"
+dest = "/opt/Tomcat/configuration/tomcat_node/log4j.properties"
 keys = [
     "/",
 ]
-reload_cmd = "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+reload_cmd = "/opt/Tomcat/scripts/restart-server.sh"

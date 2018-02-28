@@ -4,7 +4,7 @@ $WorkDirectory /var/log/tomcat
 
 $template BiglogFormatTomcat,"%timestamp:::date-rfc3339% %HOSTNAME% [tag=\"tomcat_gc\"] %msg%\n"
 
-$InputFileName /opt/apache-tomcat-7.0.78/logs/tomcat_gc.log
+$InputFileName /opt/apache-tomcat/logs/tomcat_gc.log
 $InputFileTag tomcat_gc
 $InputFileStateFile stat-file1
 $InputFileSeverity info

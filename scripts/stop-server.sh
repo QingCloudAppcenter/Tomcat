@@ -1,5 +1,5 @@
 #! /bin/bash
-/opt/apache-tomcat-7.0.78/bin/catalina.sh stop
+/opt/apache-tomcat/bin/catalina.sh stop
 tomcatProcesses=$(ps x |grep catalina |grep tomcat |grep -v grep)
 if [ -n "$tomcatProcesses" ]
 then

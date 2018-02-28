@@ -28,20 +28,20 @@
              "vertical_scaling_policy": "sequential",
              "services": {
              	 "init": {
-             	 	"cmd": "systemctl restart rsyslog;mkdir -p /data/webapps;rsync -aqxP /opt/apache-tomcat-7.0.78/webapps/ /data/webapps"
+             	 	"cmd": "systemctl restart rsyslog;mkdir -p /data/webapps;rsync -aqxP /opt/apache-tomcat/webapps/ /data/webapps"
              	 },
                  "start": {
-                    "cmd": "systemctl restart rsyslog;/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+                    "cmd": "systemctl restart rsyslog;/opt/apache-tomcat/bin/restart-server.sh"
                  },
                  "restart": {
-                   "cmd": "/opt/apache-tomcat-7.0.78/bin/restart-server.sh"
+                   "cmd": "/opt/apache-tomcat/bin/restart-server.sh"
                  },
                  "stop": {
-                     "cmd": "/opt/apache-tomcat-7.0.78/bin/stop-server.sh"
+                     "cmd": "/opt/apache-tomcat/bin/stop-server.sh"
                  },
                  "redeploy WAR for QingStor": {
                  	 "type": "custom",
-                     "cmd": "/opt/apache-tomcat-7.0.78/bin/get-war.sh"
+                     "cmd": "/opt/apache-tomcat/bin/get-war.sh"
                  }
              },
             "health_check": {
@@ -51,12 +51,12 @@
                 "action_timeout_sec": 60,
                 "healthy_threshold": 3,
                 "unhealthy_threshold": 3,
-                "check_cmd": "/opt/apache-tomcat-7.0.78/bin/serverStatus.sh",
-                "action_cmd": "/opt/apache-tomcat-7.0.78/bin/recheck-health.sh"
+                "check_cmd": "/opt/apache-tomcat/bin/serverStatus.sh",
+                "action_cmd": "/opt/apache-tomcat/bin/recheck-health.sh"
             },
             "monitor": {
                 "enable": true,
-                "cmd": "/opt/apache-tomcat-7.0.78/bin/get-monitor.sh",
+                "cmd": "/opt/apache-tomcat/bin/get-monitor.sh",
                 "items": {
                     "ajp_connector": {
                         "unit": "",
@@ -166,6 +166,8 @@
          }    
      ],
      "env": {
+         "java_version": {{env.java_version}},
+         "tomcat_version": {{env.tomcat_version}},
          "tomcat_user": {{env.tomcat_user}},
          "tomcat_pwd": {{env.tomcat_pwd}},
          "tomcat_encoding": {{env.tomcat_encoding}},

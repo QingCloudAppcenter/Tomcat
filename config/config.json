@@ -201,6 +201,32 @@
 			"type": "array",
 			"properties": [
 				{
+					"key": "java_version",
+					"label": "Version of Java",
+					"description": "Choose proper Java version to run Tomcat, NOTE: Tomcat 9.x only supports Java 8&9",
+					"type": "string",
+					"default": "7",
+					"range": [
+						"7",
+						"8",
+						"9"
+					],
+					"required": "yes"
+				},
+				{
+					"key": "tomcat_version",
+					"label": "Version of Tomcat",
+					"description": "Version of Tomcat",
+					"type": "string",
+					"default": "7",
+					"range": [
+						"7",
+						"8",
+						"9"
+					],
+					"required": "yes"
+				},
+				{
 					"key": "tomcat_user",
 					"label": "User name to access Tomcat manager GUI",
 					"description": "User name to access Tomcat manager GUI, avoid to set it as 'tomcat' because it's already predefined with role 'manager_script'",

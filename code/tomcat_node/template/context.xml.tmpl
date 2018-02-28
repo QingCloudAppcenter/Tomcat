@@ -17,10 +17,11 @@
 -->
 <!-- The contents of this file will be loaded for each web application -->
 <Context swallowOutput="true">
-
+    {{$tomcat_version :=getv "/env/tomcat_version"}}
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
-
+    {{if eq $tomcat_version "9"}}<WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>{{end}}
+    {{if ne $tomcat_version "7"}}<WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>{{end}}
     <!-- Uncomment this to disable session persistence across Tomcat restarts -->
     <!--
     <Manager pathname="" />
