@@ -12,7 +12,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-h73eih5e"
+                 "image": "img-8oqnli8d"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -28,7 +28,7 @@
              "vertical_scaling_policy": "sequential",
              "services": {
              	 "init": {
-             	 	"cmd": "systemctl restart rsyslog;mkdir -p /data/webapps;rsync -aqxP /opt/apache-tomcat/webapps/ /data/webapps"
+             	 	"cmd": "/opt/Tomcat/scripts/init-tomcat-node.sh"
              	 },
                  "start": {
                     "cmd": "systemctl restart rsyslog;/opt/apache-tomcat/bin/restart-server.sh"

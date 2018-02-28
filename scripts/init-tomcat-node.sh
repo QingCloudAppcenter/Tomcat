@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 source "/opt/Tomcat/scripts/env.sh"
 echo "Setting Java"
-source "/opt/env.sh"
-echo "Setting Java"
 if [ "${ENV_JAVA_VERSION}" == "7" ] && [ "${ENV_TOMCAT_VERSION}" == "9" ];then
   echo "Tomcat 9 doesn't support Java 7"
   exit 101
