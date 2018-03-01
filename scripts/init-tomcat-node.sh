@@ -50,4 +50,7 @@ esac
 
 systemctl restart rsyslog
 mkdir -p /data/webapps
+mkdir -p /data/war-listen
+mkdir -p /data/war-temp
+
 rsync -aqxP /opt/apache-tomcat/webapps/ /data/webapps
