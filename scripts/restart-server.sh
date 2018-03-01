@@ -5,11 +5,12 @@ if [ ! -d "/data/webapps" ] || [ ! -d "/opt/apache-tomcat/bin" ]
 then
   exit 0
 fi
+
 # sync tomcat config files
 cp -rf /opt/Tomcat/configuration/tomcat_node/context.xml /opt/apache-tomcat/conf/context.xml
 cp -rf /opt/Tomcat/configuration/tomcat_node/server.xml /opt/apache-tomcat/conf/server.xml
 cp -rf /opt/Tomcat/configuration/tomcat_node/tomcat-users.xml /opt/apache-tomcat/conf/tomcat-users.xml
-cp -rf /opt/Tomcat/configuration/tomcat_node/log4j.properties /opt/apache-tomcat/conf/log4j.properties
+cp -rf /opt/Tomcat/configuration/tomcat_node/log4j.properties /opt/apache-tomcat/lib/log4j.properties
 cp -rf /opt/Tomcat/scripts/get-monitor.sh /opt/apache-tomcat/bin/get-monitor.sh
 cp -rf /opt/Tomcat/scripts/get-war.sh /opt/apache-tomcat/bin/get-war.sh
 cp -rf /opt/Tomcat/scripts/setupenv.sh /opt/apache-tomcat/bin/setupenv.sh
