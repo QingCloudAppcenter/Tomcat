@@ -5,7 +5,8 @@ if [ ! -d "/data/webapps" ] || [ ! -d "/opt/apache-tomcat/bin" ]
 then
   exit 0
 fi
-
+# remove -i option for command cp
+unalias cp>/dev/null 2>&1
 # sync tomcat config files
 cp -rf /opt/Tomcat/configuration/tomcat_node/context.xml /opt/apache-tomcat/conf/context.xml
 cp -rf /opt/Tomcat/configuration/tomcat_node/server.xml /opt/apache-tomcat/conf/server.xml
