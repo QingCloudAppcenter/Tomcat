@@ -157,7 +157,8 @@
 	              <Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender"/>
 	            </Sender>
 	            <Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector"/>
-	            <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor"/>
+	            {{if eq $tomcat_version "7"}}<Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor"/>{{else}}
+              <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatchInterceptor"/>{{end}}
 	          </Channel>
 			  {{if exists "/links/redis_service/cluster/cluster_id"}}
         {{else}}
@@ -165,7 +166,7 @@
 	                 filter=""/>
 	          <Valve className="org.apache.catalina.ha.session.JvmRouteBinderValve"/>
 	
-	          <ClusterListener className="org.apache.catalina.ha.session.JvmRouteSessionIDBinderListener"/>
+	          {{if eq $tomcat_version "7"}}<ClusterListener className="org.apache.catalina.ha.session.JvmRouteSessionIDBinderListener"/>{{end}}
 	          <ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener"/>
 	      {{end}}
 	          <Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer"

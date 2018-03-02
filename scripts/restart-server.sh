@@ -14,7 +14,7 @@ cp -rf /opt/Tomcat/configuration/tomcat_node/tomcat-users.xml /opt/apache-tomcat
 cp -rf /opt/Tomcat/configuration/tomcat_node/log4j.properties /opt/apache-tomcat/lib/log4j.properties
 cp -rf /opt/Tomcat/scripts/get-monitor.sh /opt/apache-tomcat/bin/get-monitor.sh
 cp -rf /opt/Tomcat/scripts/get-war.sh /opt/apache-tomcat/bin/get-war.sh
-cp -rf /opt/Tomcat/scripts/setupenv.sh /opt/apache-tomcat/bin/setupenv.sh
+cp -rf /opt/Tomcat/scripts/setenv.sh /opt/apache-tomcat/bin/setenv.sh
 case "${ENV_TOMCAT_VERSION}" in
   "7")
   cp -rf /opt/Tomcat/configuration/tomcat_node/v7/catalina.properties /opt/apache-tomcat/conf/catalina.properties
