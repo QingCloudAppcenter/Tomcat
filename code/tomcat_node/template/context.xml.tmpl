@@ -28,7 +28,7 @@
     -->
     {{$jdbc_dsname :=getv "/env/jdbc_dsname"}}{{$jdbc_maxActive :=getv "/env/jdbc_maxActive"}}{{$jdbc_maxIdle :=getv "/env/jdbc_maxIdle"}}{{$jdbc_maxWait :=getv "/env/jdbc_maxWait"}}
 
-	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}{{if ne $tomcat_version "7"}}
+	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}{{if eq $tomcat_version "7"}}
 	<Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
 	<Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
          host="{{$redis_host}}"
