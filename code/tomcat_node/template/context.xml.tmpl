@@ -45,7 +45,7 @@
          database="{{$redis_dbnum}}"
          cluster="false"/>{{end}}
     </Manager>
-    {{else}}	
+    {{else}}
     <Manager className="org.apache.catalina.ha.session.DeltaManager"
                    expireSessionsOnShutdown="false"
                    notifyListenersOnReplication="true"/>
