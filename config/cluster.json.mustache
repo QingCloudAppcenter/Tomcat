@@ -15,7 +15,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-k5mchl6m"
+                 "image": "img-vjcnmj0o"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
@@ -34,7 +34,7 @@
              	 	"cmd": "/opt/Tomcat/scripts/init-tomcat-node.sh"
              	 },
                  "start": {
-                    "cmd": "systemctl restart rsyslog;/opt/apache-tomcat/bin/restart-server.sh"
+                    "cmd": "systemctl restart rsyslog;/opt/Tomcat/scripts/restart-server.sh"
                  },
                  "restart": {
                    "cmd": "/opt/apache-tomcat/bin/restart-server.sh"
