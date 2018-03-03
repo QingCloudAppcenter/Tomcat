@@ -1,9 +1,13 @@
 #! /bin/bash
 source /opt/Tomcat/scripts/env.sh
 
-if [ ! -d "/data/webapps" ] || [ ! -d "/opt/apache-tomcat/bin" ]
+if [ ! -d "/data/webapps" ]
 then
   exit 0
+fi
+if [ ! -d "/opt/apache-tomcat/bin" ]
+then
+  /opt/Tomcat/scripts/init-tomcat-node.sh
 fi
 # remove -i option for command cp
 unalias cp>/dev/null 2>&1
