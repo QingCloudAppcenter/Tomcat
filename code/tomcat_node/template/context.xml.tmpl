@@ -26,19 +26,25 @@
     <!--
     <Manager pathname="" />
     -->
-    {{$jdbc_dsname :=getv "/env/jdbc_dsname"}}
-    {{$jdbc_maxActive :=getv "/env/jdbc_maxActive"}}
-    {{$jdbc_maxIdle :=getv "/env/jdbc_maxIdle"}}
-    {{$jdbc_maxWait :=getv "/env/jdbc_maxWait"}}
+    {{$jdbc_dsname :=getv "/env/jdbc_dsname"}}{{$jdbc_maxActive :=getv "/env/jdbc_maxActive"}}{{$jdbc_maxIdle :=getv "/env/jdbc_maxIdle"}}{{$jdbc_maxWait :=getv "/env/jdbc_maxWait"}}
 
-	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}
+	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}{{if eq $tomcat_version "7"}}
 	<Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
 	<Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
          host="{{$redis_host}}"
          port="{{$redis_port}}"
          {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
          database="{{$redis_dbnum}}"
-         maxInactiveInterval="60"/>
+         maxInactiveInterval="60"/>{{else}}
+    <Valve className="com.gopivotal.manager.SessionFlushValve" />
+    <Manager className="org.apache.catalina.session.PersistentManager">
+        <Store className="com.gopivotal.manager.redis.RedisStore" 
+         host="{{$redis_host}}"
+         port="{{$redis_port}}"
+         {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
+         database="{{$redis_dbnum}}"
+         cluster="false"/>{{end}}
+    </Manager>
     {{else}}	
     <Manager className="org.apache.catalina.ha.session.DeltaManager"
                    expireSessionsOnShutdown="false"
