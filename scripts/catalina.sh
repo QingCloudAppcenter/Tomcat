@@ -132,8 +132,15 @@ done
 # Get standard environment variables
 PRGDIR=`dirname "$PRG"`
 source /opt/Tomcat/scripts/init-tomcat-node.sh
+source "/opt/Tomcat/scripts/env.sh"
 CATALINA_HOME=/opt/apache-tomcat
-CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -XX:+PrintGCDateStamps -Xloggc:/opt/apache-tomcat/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
+if ["${ENV_JAVA_VERSION}" == "9"]
+then
+  CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -XX:+PrintGCDateStamps -Xloggc:/opt/apache-tomcat/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
+else
+  CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xlog:gc*:/opt/apache-tomcat/logs/tomcat_gc.log:time,tags:filecount=1,filesize=102400"
+fi
+
 # Only set CATALINA_HOME if not already set
 [ -z "$CATALINA_HOME" ] && CATALINA_HOME=`cd "$PRGDIR/.." >/dev/null; pwd`
 
