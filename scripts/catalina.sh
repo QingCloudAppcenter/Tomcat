@@ -136,9 +136,9 @@ source "/opt/Tomcat/scripts/env.sh"
 CATALINA_HOME=/opt/apache-tomcat
 if ["${ENV_JAVA_VERSION}" == "9"]
 then
-  CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -XX:+PrintGCDateStamps -Xloggc:/opt/apache-tomcat/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
-else
   CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xlog:gc*:/opt/apache-tomcat/logs/tomcat_gc.log:time,tags:filecount=1,filesize=102400"
+else
+  CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -XX:+PrintGCDateStamps -Xloggc:/opt/apache-tomcat/logs/tomcat_gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=100M"
 fi
 
 # Only set CATALINA_HOME if not already set
