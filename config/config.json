@@ -62,7 +62,7 @@
 							"port": 8080,
 							"default": [
 							],
-							"required": "yes"
+							"required": "no"
 						},
 						{
 							"key": "cpu",
@@ -74,7 +74,8 @@
 								1,
 								2,
 								4,
-								8
+								8,
+								16
 							],
 							"required": "yes"
 						},
@@ -87,7 +88,9 @@
 							"range": [
 								2048,
 								4096,
-								8192
+								8192,
+								16384,
+								24576
 							],
 							"required": "yes"
 						},
@@ -199,7 +202,7 @@
 					"label": "Version of Java",
 					"description": "Choose proper Java version to run Tomcat, NOTE: Tomcat 9.x only supports Java 8&9",
 					"type": "string",
-					"default": "7",
+					"default": "8",
 					"range": [
 						"7",
 						"8",

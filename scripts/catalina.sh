@@ -134,7 +134,7 @@ PRGDIR=`dirname "$PRG"`
 source /opt/Tomcat/scripts/init-tomcat-node.sh
 source "/opt/Tomcat/scripts/env.sh"
 CATALINA_HOME=/opt/apache-tomcat
-if ["${ENV_JAVA_VERSION}" == "9"]
+if [ "${ENV_JAVA_VERSION}" == "9" ]
 then
   CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xlog:gc*:/opt/apache-tomcat/logs/tomcat_gc.log:time,tags:filecount=1,filesize=102400"
 else
