@@ -2,6 +2,9 @@
      "name": {{cluster.name}},
      "description": {{cluster.description}},
      "vxnet": {{cluster.vxnet}},
+     "upgrade_policy": [
+            "appv-gva21mw0"
+        ],
      "links": {
          "redis_service": {{cluster.redis_service}},
          "mysql_service": {{cluster.mysql_service}}
@@ -12,7 +15,7 @@
              "container": {
                  "type": "kvm",
                  "zone": "pek3a",
-                 "image": "img-93zmxxzj"
+                 "image": "img-k5mchl6m"
              },
              "loadbalancer": {{cluster.tomcat_nodes.loadbalancer}},
              "instance_class": {{cluster.tomcat_nodes.instance_class}},
