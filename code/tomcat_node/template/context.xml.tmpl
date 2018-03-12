@@ -43,8 +43,8 @@
          port="{{$redis_port}}"
          {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
          database="{{$redis_dbnum}}"
-         cluster="false"/>{{end}}
-    </Manager>
+         cluster="false"/>
+    </Manager>{{end}}
     {{else}}
     <Manager className="org.apache.catalina.ha.session.DeltaManager"
                    expireSessionsOnShutdown="false"
