@@ -1,0 +1,6 @@
+app_version: 3.0.0
+caddy_version: 1.0.4
+tomcat_versions:
+- 7.0.103
+- 8.5.54
+- 9.0.34

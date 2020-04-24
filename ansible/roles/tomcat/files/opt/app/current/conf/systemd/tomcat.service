@@ -1,0 +1,19 @@
+[Unit]
+Description=Tomcat Service
+Documentation=https://tomcat.apache.org
+Requires=network.target
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+EnvironmentFile=/opt/app/current/conf/tomcat/.env
+ExecStart=/opt/tomcat/current/bin/startup.sh
+ExecStop=/opt/tomcat/current/bin/shutdown.sh
+WorkingDirectory=/data/tomcat
+
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=default.target
+

@@ -1,0 +1,52 @@
+---
+- name: install confd files
+  include_role:
+    name: confd-files-1.0.5
+
+- name: install jdk
+  include_role:
+    name: install-1.0.5
+  vars:
+    opts:
+      pkg_name: jdk
+      pkg_version: "8"
+      pkg_type: tgz
+      pkg_url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u252-b09/OpenJDK8U-jdk_x64_linux_hotspot_8u252b09.tar.gz
+      extracts: yes
+      creates: bin/javac
+      bin_path: bin
+
+- name: create service user
+  include_role:
+    name: create-service-user-1.0.0
+  vars:
+    svc_user: tomcat
+
+- name: install tomcat packages
+  include_role:
+    name: install-1.0.5
+  vars:
+    opts:
+      pkg_name: tomcat
+      pkg_version: "{{ tomcat_version }}"
+      pkg_url: https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-{{ tomcat_version | regex_search('^[0-9]+') }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+      pkg_type: tgz
+      extracts: yes
+      target_owner: tomcat
+      target_group: svc
+      creates: bin
+  loop: "{{ tomcat_versions }}"
+  loop_control:
+    loop_var: tomcat_version
+
+- name: install app files
+  copy:
+    src: "{{ role_path }}/files/{{ dir_path }}"
+    dest: /{{ dir_path }}
+    owner: root
+    group: root
+    mode: preserve
+  loop:
+  - opt/app/
+  loop_control:
+    loop_var: dir_path

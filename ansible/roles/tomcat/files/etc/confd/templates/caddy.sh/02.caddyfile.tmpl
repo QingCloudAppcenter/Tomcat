@@ -1,0 +1,11 @@
+flush /opt/app/current/conf/caddy/caddyfile << CADDYFILE_EOF
+:80 {
+  {{- with getv "/env/web.console.password" "" }}
+  basicauth / "{{ getv "/env/web.console.username" "admin" }}" "{{ . }}"
+  {{- end }}
+  root /data
+  gzip
+  browse /tomcat/logs
+  tls off
+}
+CADDYFILE_EOF

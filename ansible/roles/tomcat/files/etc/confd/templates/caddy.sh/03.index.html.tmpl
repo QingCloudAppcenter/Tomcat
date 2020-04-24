@@ -1,0 +1,90 @@
+flush /opt/app/current/conf/caddy/index.html << HTML_EOF
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html, body, ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background: #f2f2f2;
+        font-family: sans-serif;
+        font-size: 1.2em;
+        height: 3.2em;
+        line-height: 3.2em;
+        padding-left: 5%;
+      }
+
+      .meta {
+        border-bottom: 1px solid #9c9c9c;
+        font-family: Verdana; sans-serif;
+        font-size: 12px;
+        line-height: 44px;
+        padding-left: 5%;
+      }
+
+      .listing {
+        list-style-type: none;
+      }
+
+      .listing>li {
+        border-bottom: 1px solid #dadada;
+        font-family: sans-serif;
+        font-size: 14px;
+        line-height: 36px;
+        padding-left: 5%;
+      }
+
+      .listing>li.header {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 46px;
+      }
+
+      .listing>li>span {
+        margin-right: 1em;
+      }
+
+      .listing>li>span.sub-1 {
+        margin-left: 1em;
+      }
+
+      .listing>li>a {
+        color: #006ed3;
+      }
+
+      footer {
+        font-size: 12px;
+        line-height: 72px;
+        text-align: center;
+      }
+    </style>
+    <title>Files</title>
+  </head>
+  <body>
+    <header>文件查看器</header>
+    <main>
+      {{- $tomcatNodes := getvs "/hosts/tomcat_nodes/*/ip" }}
+      <div class="meta">
+        <span>共 <b>{{ len $tomcatNodes }}</b> 个 Tomcat 节点</span>
+      </div>
+      <ul class="listing">
+        <li class="header">节点/目录</li>
+        {{- range $tomcatNodes }}
+        {{- if eq . (getv "/host/ip") }}
+        <li><span>⊟</span>{{ . }}</li>
+        <li><span class="sub-1">⊞</span><a href="./tomcat/logs/">tomcat/logs/</a></li>
+        {{- else }}
+        <li><span>⊞</span><a href="//{{ . }}/">{{ . }}</a></li>
+        {{- end }}
+        {{- end }}
+      </ul>
+    </main>
+    <footer>
+      Served with <a rel="noopener noreferrer" href="https://caddyserver.com">Caddy</a>
+    </footer>
+  </body>
+</html>
+HTML_EOF
