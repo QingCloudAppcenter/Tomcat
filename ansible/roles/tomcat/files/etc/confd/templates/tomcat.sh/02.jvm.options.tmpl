@@ -1,0 +1,16 @@
+flush /opt/app/current/bin/envs/jvm.options << JVM_OPTS_EOF
+{{- with getv "/env/java_opts" }}
+JAVA_OPTS="{{ . }}"
+{{- else }}
+{{- $tomcat_encoding := getv "/env/tomcat_encoding" }}
+JAVA_OPTS="$(echo "
+-Djavax.servlet.request.encoding={{ $tomcat_encoding }}
+-Dfile.encoding={{ $tomcat_encoding }}
+{{- with div (getv "/host/memory") 2 }}
+-Xms{{ . }}m
+-Xmx{{ . }}m
+-XX:NewRatio=1
+-XX:ReservedCodeCacheSize=128m
+" | xargs)"
+{{- end }}
+JVM_OPTS_EOF

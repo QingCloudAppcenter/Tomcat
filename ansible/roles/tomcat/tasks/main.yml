@@ -39,6 +39,15 @@
   loop_control:
     loop_var: tomcat_version
 
+- name: link tomcat version
+  file:
+    src: "{{ tomcat_version }}"
+    dest: /opt/tomcat/{{ tomcat_version | regex_search("^[0-9]+") }}
+    state: link
+  loop: "{{ tomcat_versions }}"
+  loop_control:
+    loop_var: tomcat_version
+
 - name: install app files
   copy:
     src: "{{ role_path }}/files/{{ dir_path }}"
@@ -50,3 +59,8 @@
   - opt/app/
   loop_control:
     loop_var: dir_path
+
+- name: increase inode watch limit
+  sysctl:
+    name: fs.inotify.max_user_watches
+    value: 524288

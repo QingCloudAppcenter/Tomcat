@@ -7,7 +7,8 @@ After=network.target
 [Service]
 Type=forking
 User=tomcat
-EnvironmentFile=/opt/app/current/conf/tomcat/.env
+EnvironmentFile=/opt/app/current/bin/envs/jvm.options
+EnvironmentFile=/opt/app/current/bin/envs/tomcat.env
 ExecStart=/opt/tomcat/current/bin/startup.sh
 ExecStop=/opt/tomcat/current/bin/shutdown.sh
 WorkingDirectory=/data/tomcat
@@ -16,4 +17,3 @@ LimitNOFILE=1048576
 
 [Install]
 WantedBy=default.target
-
