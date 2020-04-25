@@ -6,9 +6,9 @@ JAVA_OPTS="{{ . }}"
 JAVA_OPTS="$(echo "
 -Djavax.servlet.request.encoding={{ $tomcat_encoding }}
 -Dfile.encoding={{ $tomcat_encoding }}
-{{- with div (getv "/host/memory") 2 }}
--Xms{{ . }}m
--Xmx{{ . }}m
+{{- $halfMem := div (getv "/host/memory") 2 }}
+-Xms{{ $halfMem }}m
+-Xmx{{ $halfMem }}m
 -XX:NewRatio=1
 -XX:ReservedCodeCacheSize=128m
 " | xargs)"

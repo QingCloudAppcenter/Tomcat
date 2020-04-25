@@ -9,12 +9,24 @@
   vars:
     opts:
       pkg_name: jdk
-      pkg_version: "8"
+      pkg_version: "{{ java_pkg.version }}"
       pkg_type: tgz
-      pkg_url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u252-b09/OpenJDK8U-jdk_x64_linux_hotspot_8u252b09.tar.gz
+      pkg_url: "{{ java_pkg.url }}"
       extracts: yes
       creates: bin/javac
       bin_path: bin
+  loop: "{{ java_pkgs }}"
+  loop_control:
+    loop_var: java_pkg
+
+- name: link java version
+  file:
+    src: "{{ java_pkg.version }}"
+    dest: /opt/jdk/{{ java_pkg.version | regex_search("^[0-9]+") }}
+    state: link
+  loop: "{{ java_pkgs }}"
+  loop_control:
+    loop_var: java_pkg
 
 - name: create service user
   include_role:
@@ -53,7 +65,7 @@
     src: "{{ role_path }}/files/{{ dir_path }}"
     dest: /{{ dir_path }}
     owner: root
-    group: root
+    group: svc
     mode: preserve
   loop:
   - opt/app/
@@ -63,4 +75,4 @@
 - name: increase inode watch limit
   sysctl:
     name: fs.inotify.max_user_watches
-    value: 524288
+    value: '524288'

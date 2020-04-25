@@ -1,59 +1,65 @@
-flush /opt/app/current/conf/tomcat/context.xml << TOMCAT_CONTEXT_EOF
-<?xml version='1.0' encoding='utf-8'?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
+defaultContextFile=/opt/tomcat/current/conf/context.xml
+runtimeContextFile=/opt/app/current/conf/tomcat/context.xml
 
-      http://www.apache.org/licenses/LICENSE-2.0
+sed "/-- tomcat context./q" $defaultContextFile | sed '/<\/Context>/d' > $runtimeContextFile.swap
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
-<Context swallowOutput="true">
-    {{$tomcat_version :=getv "/env/tomcat_version"}}
-    <WatchedResource>WEB-INF/web.xml</WatchedResource>
-    {{if eq $tomcat_version "9"}}<WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>{{end}}
-    {{if ne $tomcat_version "7"}}<WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>{{end}}
-    {{$jdbc_dsname :=getv "/env/jdbc_dsname"}}{{$jdbc_maxActive :=getv "/env/jdbc_maxActive"}}{{$jdbc_maxIdle :=getv "/env/jdbc_maxIdle"}}{{$jdbc_maxWait :=getv "/env/jdbc_maxWait"}}
-
-	{{if exists "/links/redis_service/cluster/cluster_id"}}{{$redis_host :=getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value"}}{{$redis_port :=getv "/links/redis_service/cluster/endpoints/client/port"}}{{$redis_dbnum :=getv "/env/redis_db_num"}}{{if eq $tomcat_version "7"}}
-	<Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
-	<Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
-         host="{{$redis_host}}"
-         port="{{$redis_port}}"
-         {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
-         database="{{$redis_dbnum}}"
-         maxInactiveInterval="60"/>{{else}}
+flush >> $runtimeContextFile.swap << TOMCAT_CONTEXT_EOF
+    <!-- tomcat context. WARNING: this is managed by script and please don't touch manually. -->
+    {{- $tomcat_version := getv "/env/tomcat_version" }}
+    {{- $jdbc_dsname := getv "/env/jdbc_dsname" }}
+    {{- $jdbc_maxActive := getv "/env/jdbc_maxActive" }}
+    {{- $jdbc_maxIdle := getv "/env/jdbc_maxIdle" }}
+    {{- $jdbc_maxWait := getv "/env/jdbc_maxWait" }}
+    {{- if exists "/links/redis_service/cluster/cluster_id" }}
+    {{- $redis_host := getv "/links/redis_service/cluster/endpoints/reserved_ips/vip/value" }}
+    {{- $redis_port := getv "/links/redis_service/cluster/endpoints/client/port" }}
+    {{- $redis_dbnum := getv "/env/redis_db_num" }}
+    {{- if eq $tomcat_version "7" }}
+    <Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
+    <Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
+         host="{{ $redis_host }}"
+         port="{{ $redis_port }}"
+         {{- with $redis_pwd := getv "/links/redis_service/env/requirepass" "" }}
+         password="{{ $redis_pwd }}"
+         {{- end }}
+         database="{{ $redis_dbnum }}"
+         maxInactiveInterval="60" />
+    {{- else }}
     <Valve className="com.gopivotal.manager.SessionFlushValve" />
     <Manager className="org.apache.catalina.session.PersistentManager">
-        <Store className="com.gopivotal.manager.redis.RedisStore" 
-         host="{{$redis_host}}"
-         port="{{$redis_port}}"
-         {{if exists "/links/redis_service/env/requirepass"}}{{$redis_pwd :=getv "/links/redis_service/env/requirepass"}}{{if gt ( len ( $redis_pwd ) ) 0}}password="{{$redis_pwd}}"{{end}}{{end}}
-         database="{{$redis_dbnum}}"
-         cluster="false"/>
-    </Manager>{{end}}
-    {{else}}
+      <Store className="com.gopivotal.manager.redis.RedisStore"
+          host="{{ $redis_host}}"
+          port="{{ $redis_port}}"
+          {{- with $redis_pwd := getv "/links/redis_service/env/requirepass" }}
+          password="{{ $redis_pwd }}"
+          {{- end }}
+          database="{{ $redis_dbnum }}"
+          cluster="false" />
+    </Manager>
+    {{- end }}
+    {{- else }}
     <Manager className="org.apache.catalina.ha.session.DeltaManager"
-                   expireSessionsOnShutdown="false"
-                   notifyListenersOnReplication="true"/>
-	{{end}}
-	
-	{{if exists "/links/mysql_service/cluster/cluster_id"}}{{$mysql_db :=getv "/env/mysql_db_name"}}{{$mysql_user :=getv "/links/mysql_service/env/user"}}{{$mysql_pwd :=getv "/links/mysql_service/env/passwd"}}{{$mysql_mode :=getv "/env/mysql_ip_mode"}}{{$mysql_write_host :=getv "/links/mysql_service/cluster/endpoints/reserved_ips/write_vip/value"}}{{$mysql_read_host :=getv "/links/mysql_service/cluster/endpoints/reserved_ips/read_vip/value"}}{{$mysql_port :=getv "/links/mysql_service/cluster/endpoints/client_port/port"}}
-    <Resource name="jdbc/{{$jdbc_dsname}}" auth="Container" type="javax.sql.DataSource"
-               maxActive="{{$jdbc_maxActive}}" maxIdle="{{$jdbc_maxIdle}}" maxWait="{{$jdbc_maxWait}}"
-               username="{{$mysql_user}}" password="{{$mysql_pwd}}" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://{{if eq $mysql_mode "write_ip"}}{{$mysql_write_host}}{{else}}{{$mysql_read_host}}{{end}}:{{$mysql_port}}/{{$mysql_db}}"/>
-	{{end}}
+        expireSessionsOnShutdown="false"
+        notifyListenersOnReplication="true" />
+    {{- end }}
+
+    {{- if exists "/links/mysql_service/cluster/cluster_id" }}
+    {{- $mysql_db := getv "/env/mysql_db_name" }}
+    {{- $mysql_user := getv "/links/mysql_service/env/user" }}
+    {{- $mysql_pwd := getv "/links/mysql_service/env/passwd" }}
+    {{- $mysql_mode := getv "/env/mysql_ip_mode" }}
+    {{- $mysql_write_host := getv "/links/mysql_service/cluster/endpoints/reserved_ips/write_vip/value" }}
+    {{- $mysql_read_host := getv "/links/mysql_service/cluster/endpoints/reserved_ips/read_vip/value" }}
+    {{- $mysql_port := getv "/links/mysql_service/cluster/endpoints/client_port/port" }}
+    <Resource name="jdbc/{{ $jdbc_dsname }}" auth="Container" type="javax.sql.DataSource"
+        maxActive="{{ $jdbc_maxActive }}" maxIdle="{{ $jdbc_maxIdle }}" maxWait="{{ $jdbc_maxWait }}"
+        username="{{ $mysql_user }}" password="{{ $mysql_pwd }}" driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://{{ if eq $mysql_mode "write_ip" }}{{ $mysql_write_host }}{{ else }}{{ $mysql_read_host }}{{ end }}:{{ $mysql_port }}/{{ $mysql_db }}" />
+    {{end}}
     <JarScanner>
-        <JarScanFilter defaultPluggabilityScan="false" />
+      <JarScanFilter defaultPluggabilityScan="false" />
     </JarScanner>
 </Context>
 TOMCAT_CONTEXT_EOF
+
+mv $runtimeContextFile.swap $runtimeContextFile
