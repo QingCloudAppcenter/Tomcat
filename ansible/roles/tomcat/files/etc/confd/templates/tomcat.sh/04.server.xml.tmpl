@@ -1,6 +1,7 @@
-defaultServerFile=/opt/tomcat/current/conf/server.xml
+defaultServerFile=/opt/tomcat/{{ $tomcatVersion }}/conf/server.xml
 runtimeServerFile=/opt/app/current/conf/tomcat/server.xml
 executorXmlFile=/tmp/executor.xml
+
 flush $executorXmlFile << EXECUTOR_XML_EOF
     <Executor name="tomcatThreadPool"
         namePrefix="catalina-exec-"
@@ -12,7 +13,6 @@ sed -e "/<Service /r $executorXmlFile" $defaultServerFile > $runtimeServerFile.s
 
 sed -ri 's#(<Connector port="8080" protocol="HTTP/1.1")#\1 executor="tomcatThreadPool" URIEncoding="{{ getv "/env/tomcat_encoding" }}"#' $runtimeServerFile.swap
 
-{{- $tomcat_version := getv "/env/tomcat_version" "8" }}
 clusterXmlFile=/tmp/cluster.xml
 flush $clusterXmlFile << CLUSTER_XML_EOF
         <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster" channelSendOptions="8">
@@ -23,7 +23,7 @@ flush $clusterXmlFile << CLUSTER_XML_EOF
               <Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender" />
             </Sender>
             <Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector" />
-            {{- if eq $tomcat_version "7" }}
+            {{- if eq $tomcatVersion "7" }}
             <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor" />
             {{- else }}
             <Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatchInterceptor" />
@@ -32,12 +32,12 @@ flush $clusterXmlFile << CLUSTER_XML_EOF
           {{- if not (exists "/links/redis_service/cluster/cluster_id") }}
           <Valve className="org.apache.catalina.ha.tcp.ReplicationValve" filter="" />
           <Valve className="org.apache.catalina.ha.session.JvmRouteBinderValve" />
-          {{- if eq $tomcat_version "7" }}
+          {{- if eq $tomcatVersion "7" }}
           <ClusterListener className="org.apache.catalina.ha.session.JvmRouteSessionIDBinderListener" />
           {{- end }}
           <ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener" />
           {{- end }}
-          <Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer" tempDir="war-temp" deployDir="webapps" watchDir="war-listen" watchEnabled="true" />
+          <Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer" tempDir="war-temp" deployDir="webapps" watchDir="war-listen" watchEnabled="$isFirstNode" />
         </Cluster>
 CLUSTER_XML_EOF
 sed -i "/unpackWARs/r $clusterXmlFile" $runtimeServerFile.swap

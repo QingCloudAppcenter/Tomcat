@@ -418,6 +418,28 @@
 					"required": "no"
 				}
 			]
-		}
+    },
+    {
+      "key": "service_params",
+      "description": "Custom service configuration properties",
+      "type": "array",
+      "properties": [
+        {
+          "key": "webapps",
+          "label": "Web Apps",
+          "description": "install tomcat official webapps",
+					"type": "string",
+					"range": [
+						"ROOT",
+						"docs",
+						"examples",
+						"host-manager",
+						"manager"
+					],
+          "default": "",
+          "required": "yes"
+				}
+			]
+    }
 	]
 }

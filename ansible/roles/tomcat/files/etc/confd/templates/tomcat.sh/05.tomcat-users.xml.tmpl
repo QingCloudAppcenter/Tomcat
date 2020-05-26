@@ -1,4 +1,4 @@
-defaultUsersFile=/opt/tomcat/current/conf/tomcat-users.xml
+defaultUsersFile=/opt/tomcat/{{ $tomcatVersion }}/conf/tomcat-users.xml
 runtimeUsersFile=/opt/app/current/conf/tomcat/tomcat-users.xml
 
 sed '/<\/tomcat-users/d' $defaultUsersFile > $runtimeUsersFile.swap
