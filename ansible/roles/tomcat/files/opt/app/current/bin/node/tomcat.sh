@@ -10,6 +10,7 @@ initNode() {
     [ -e "$confDir/$fileName" ] || ln -s $defaultConfDir/$fileName $confDir/$fileName
   done
   ln -snf $confDir /data/tomcat/conf
+  installWebApp manager
   local htmlFile=/data/index.html; test -e "$htmlFile" || ln -s /opt/app/current/conf/caddy/index.html $htmlFile
 }
 
