@@ -19,7 +19,6 @@
     "Node Count": "节点数量",
     "Number of nodes for the cluster to create": "要创建的节点数量",
     "Instance Class": "实例类型",
-    "The instance type for the cluster to run, such as high performance, high performance plus": "节点实例类型，比如性能型与超高性能型",
     "Volume Size": "磁盘大小",
     "The volume size for each node": "每个节点磁盘的大小",
     "Log Server Node": "日志服务器节点",
