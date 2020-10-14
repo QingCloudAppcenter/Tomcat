@@ -1,423 +1,423 @@
 {
-	"type": "array",
-	"properties": [
-		{
-			"key": "cluster",
-			"description": "Tomcat cluster with Session Replication",
-			"type": "array",
-			"properties": [
-				{
-					"key": "name",
-					"label": "Name",
-					"description": "The name of the Tomcat cluster service",
-					"type": "string",
-					"default": "Tomcat Cluster",
-					"required": "no"
-				},
-				{
-					"key": "description",
-					"label": "Description",
-					"description": "The description of the Tomcat cluster service",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "vxnet",
-					"label": "vxnet",
-					"description": "Choose a vxnet to join",
-					"type": "string",
-					"default": "",
-					"required": "yes"
-				},
-				{
-					"key": "redis_service",
-					"label": "Redis",
-					"description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it",
-					"type": "service",
-					"tag": ["Redis", "redis"],
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_service",
-					"label": "MySql",
-					"description": "Choose a MySql to use and related MySql infomation in service properties section below, leave empty if you choose not to use it",
-					"type": "service",
-					"tag": ["MySql", "mysql"],
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "tomcat_nodes",
-					"label": "Tomcat Nodes",
-					"description": "Tomcat node properties",
-					"type": "array",
-					"properties": [
-						{
-							"key": "loadbalancer",
-							"label": "loadbalancer",
-							"description": "Choose a loadbalancer service (When you create loadbalancer, you need to select the Internet type. Loadbalancer listener need to enable Session Sticky. Listener protocol should be http)",
-							"type": "loadbalancer",
-							"port": 8080,
-							"default": [
-							],
-							"required": "no"
-						},
-						{
-							"key": "cpu",
-							"label": "CPU",
-							"description": "CPUs of each node",
-							"type": "integer",
-							"default": 1,
-							"range": [
-								1,
-								2,
-								4,
-								8,
-								16
-							],
-							"required": "yes"
-						},
-						{
-							"key": "memory",
-							"label": "Memory",
-							"description": "memory of each node",
-							"type": "integer",
-							"default": 2048,
-							"range": [
-								2048,
-								4096,
-								8192,
-								16384,
-								24576
-							],
-							"required": "yes"
-						},
-						{
-							"key": "instance_class",
-							"label": "Instance Class",
-							"description": "The instance type for the cluster to run, such as high performance, high performance plus",
-							"type": "integer",
-							"default": 0,
-							"range": [
-								0,
-								1
-							],
-							"required": "yes"
-						},
-						{
-							"key": "count",
-							"label": "Node Count",
-							"description": "Number of nodes for the cluster to create",
-							"type": "integer",
-							"default": 2,
-							"range": [
-								1,
-								2,
-								3,
-								4,
-								5,
-								6,
-								7,
-								8,
-								9
-							],
-							"required": "yes"
-						},
-						{
-							"key": "volume_size",
-							"label": "Volume Size",
-							"description": "The volume size for each node",
-							"type": "integer",
-							"default": 10,
-							"required": "no"
-						}
-					]
-				},
-				{
-					"key": "log_node",
-					"label": "Log Server Node",
-					"description": "Log server to collect all log files from all Tomcat nodes",
-					"type": "array",
-					"properties": [
-						{
-							"key": "cpu",
-							"label": "CPU",
-							"description": "CPUs of each node",
-							"type": "integer",
-							"default": 1,
-							"range": [
-								1,
-								2,
-								4,
-								8
-							],
-							"required": "yes"
-						},
-						{
-							"key": "memory",
-							"label": "Memory",
-							"description": "memory of each node",
-							"type": "integer",
-							"default": 2048,
-							"range": [
-								2048,
-								4096,
-								8192
-							],
-							"required": "yes"
-						},
-						{
-							"key": "instance_class",
-							"label": "Instance Class",
-							"description": "The instance type for the cluster to run, such as high performance, high performance plus",
-							"type": "integer",
-							"default": 0,
-							"range": [
-								0,
-								1
-							],
-							"required": "yes"
-						},
-						{
-							"key": "volume_size",
-							"label": "Volume Size",
-							"description": "The volume size for this log server",
-							"type": "integer",
-							"default": 10,
-							"required": "no"
-						}
-					]
-				}			
-			]
-		},
-		{
-			"key": "env",
-			"description": "Tomcat cluster service properties",
-			"type": "array",
-			"properties": [
-				{
-					"key": "java_version",
-					"label": "Version of Java",
-					"description": "Choose proper Java version to run Tomcat, NOTE: Tomcat 9.x only supports Java 8&9",
-					"type": "string",
-					"default": "8",
-					"range": [
-						"7",
-						"8",
-						"9"
-					],
-					"changeable": false,
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_version",
-					"label": "Version of Tomcat",
-					"description": "Version of Tomcat",
-					"type": "string",
-					"default": "7",
-					"range": [
-						"7",
-						"8",
-						"9"
-					],
-					"changeable": false,
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_user",
-					"label": "User name to access Tomcat manager GUI",
-					"description": "User name to access Tomcat manager GUI, avoid to set it as 'tomcat' because it's already predefined with role 'manager_script'",
-					"type": "string",
-					"default": "qingAdmin",
-					"pattern": "^(?!.*?[tT][oO][mM][cC][aA][tT]).*$",
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_pwd",
-					"label": "Password to access Tomcat manager",
-					"description": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script', the default password is 'qing0pwd'",
-					"type": "password",
-					"changeable": true,
-					"default": "qing0pwd",
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_encoding",
-					"label": "Tomcat character encoding",
-					"description": "Tomcat character encoding, this value will be set in javax.servlet.request.encoding and file.encoding when launching Tomcat, also set in URIEncoding in server.xml",
-					"type": "string",
-					"default": "UTF-8",
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_log_level",
-					"label": "Tomcat logging level",
-					"description": "The logging level of log4j within Tomcat scope, settting 'INFO' as default value",
-					"type": "string",
-					"default": "INFO",
-					"range": [
-						"OFF",
-						"FATAL",
-						"ERROR",
-						"WARN",
-						"INFO",
-						"DEBUG",
-						"ALL"
-					],
-					"required": "yes"
-				},
-				{
-					"key": "tomcat_log_packages",
-					"label": "Tomcat logging packages",
-					"description": "Packages to include in the logging, separated by comma. Tomcat defines loggers by Engine and Host names. For example: log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost],log4j.logger.org.apache.catalina.session",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "threadpool_maxThreads",
-					"label": "The max number of active threads",
-					"description": "The max number of active threads in Tomcat shared thread pool",
-					"type": "string",
-					"default": "200",
-					"required": "yes"
-				},
-				{
-					"key": "threadpool_minSpareThreads",
-					"label": "The minimum number of kept alive threads",
-					"description": "The minimum number of threads always kept alive in Tomcat shared thread pool",
-					"type": "string",
-					"default": "25",
-					"required": "yes"
-				},
-				{
-					"key": "threadpool_maxIdleTime",
-					"label": "The number of milliseconds before an idle thread shutsdown",
-					"description": "The number of milliseconds before an idle thread shutsdown, unless the number of active threads are less or equal to minSpareThreads",
-					"type": "string",
-					"default": "60000",
-					"required": "yes"
-				},
-				{
-					"key": "java_opts",
-					"label": "Java runtime properties",
-					"description": "Java runtime properties when running Tomcat, leave empty if you accept our default JVM heap size setting(1/4 memory as xms, and 1/2 memory as xmx). Note: our default setting will not take effect if you input any value in this area, the validaton of JAVA_OPTS should be handled by you ahead of time, otherwise Tomcat server may fail to start",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "war_source",
-					"label": "How to get WAR file",
-					"description": "Choose a way to upload WAR to Tomcat server, the default way is using Tomcat manager UI or command, the other option is QingStor. Note: Tomcat manager could only deploy WAR to single node, we monitor that deployment and copy the deployed WAR file to watched folder of Tomcat FarmWarDeployer, which will distribute this file to other nodes",
-					"type": "string",
-					"changeable": true,
-					"default": "tomcat_manager",
-					"range": [
-						"tomcat_manager",
-						"qingstor"
-					],
-					"required": "yes"
-				},
-				{
-					"key": "redis_db_num",
-					"label": "Redis database number",
-					"description": "Redis Database Number, leave empty if you choose not to use Redis database",
-					"type": "string",
-					"default": "0",
-					"required": "no"
-				},
-				{
-					"key": "access_key_id",
-					"label": "access_key_id",
-					"description": "access_key_id to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
-					"type": "string",
-					"changeable": true,
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "secret_access_key",
-					"label": "secret_access_key",
-					"description": "secret_access_key to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
-					"type": "password",
-					"changeable": true,
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "zone",
-					"label": "zone",
-					"description": "Zone of bucket for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
-					"type": "string",
-					"changeable": true,
-					"default": "pek3a",
-					"range": [
-						"pek3a",
-						"sh1a"
-					],
-					"required": "no"
-				},
-				{
-					"key": "bucket",
-					"label": "bucket",
-					"description": "Bucket name for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
-					"type": "string",
-					"changeable": true,
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "war_name",
-					"label": "war name",
-					"description": "The web application(WAR) file Name, leave empty if you chooose to use Tomcat Manager",
-					"type": "string",
-					"default": "",
-					"required": "no"
-				},
-				{
-					"key": "mysql_db_name",
-					"label": "MySql database name",
-					"description": "MySql Database Name, leave empty if you choose not to use MySql database",
-					"type": "string",
-					"default": "mysql",
-					"required": "no"
-				},
-				{
-					"key": "jdbc_dsname",
-					"label": "Datasoure name of Tomcat JDBC connection pool",
-					"description": "Datasoure name of Tomcat JDBC connection pool to connect MySql database",
-					"type": "string",
-					"default": "TestDB",
-					"required": "no"
-				},
-				{
-					"key": "jdbc_maxActive",
-					"label": "The maximum number of active database connections",
-					"description": "The maximum number of active database connections that can be allocated from this pool at the same time",
-					"type": "string",
-					"default": "100",
-					"required": "no"
-				},
-				{
-					"key": "jdbc_maxIdle",
-					"label": "The maximum number of kept database connections",
-					"description": "The maximum number of database connections that should be kept in the pool at all times",
-					"type": "string",
-					"default": "30",
-					"required": "no"
-				},
-				{
-					"key": "jdbc_maxWait",
-					"label": "The maximum number of milliseconds before a database connection timeout",
-					"description": "The maximum number of milliseconds that the pool will wait (when there are no available connections) for a database connection to be returned before throwing an exception",
-					"type": "string",
-					"default": "30000",
-					"required": "no"
-				}
-			]
-		}
-	]
+  "type": "array",
+  "properties": [
+    {
+      "key": "cluster",
+      "description": "Tomcat cluster with Session Replication",
+      "type": "array",
+      "properties": [
+        {
+          "key": "name",
+          "label": "Name",
+          "description": "The name of the Tomcat cluster service",
+          "type": "string",
+          "default": "Tomcat Cluster",
+          "required": "no"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "description": "The description of the Tomcat cluster service",
+          "type": "string",
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "vxnet",
+          "label": "vxnet",
+          "description": "Choose a vxnet to join",
+          "type": "string",
+          "default": "",
+          "required": "yes"
+        },
+        {
+          "key": "redis_service",
+          "label": "Redis",
+          "description": "Choose a Redis to use and input database number in service properties section below, leave empty if you choose not to use it",
+          "type": "service",
+          "tag": ["Redis", "redis"],
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "mysql_service",
+          "label": "MySql",
+          "description": "Choose a MySql to use and related MySql infomation in service properties section below, leave empty if you choose not to use it",
+          "type": "service",
+          "tag": ["MySql", "mysql"],
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "tomcat_nodes",
+          "label": "Tomcat Nodes",
+          "description": "Tomcat node properties",
+          "type": "array",
+          "properties": [
+            {
+              "key": "loadbalancer",
+              "label": "loadbalancer",
+              "description": "Choose a loadbalancer service (When you create loadbalancer, you need to select the Internet type. Loadbalancer listener need to enable Session Sticky. Listener protocol should be http)",
+              "type": "loadbalancer",
+              "port": 8080,
+              "default": [
+              ],
+              "required": "no"
+            },
+            {
+              "key": "cpu",
+              "label": "CPU",
+              "description": "CPUs of each node",
+              "type": "integer",
+              "default": 1,
+              "range": [
+                1,
+                2,
+                4,
+                8,
+                16
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "memory",
+              "label": "Memory",
+              "description": "memory of each node",
+              "type": "integer",
+              "default": 2048,
+              "range": [
+                2048,
+                4096,
+                8192,
+                16384,
+                24576
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "instance_class",
+              "label": "Instance Class",
+              "description": "",
+              "type": "integer",
+              "default": 0,
+              "range": [
+                0,
+                1
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "count",
+              "label": "Node Count",
+              "description": "Number of nodes for the cluster to create",
+              "type": "integer",
+              "default": 2,
+              "range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "volume_size",
+              "label": "Volume Size",
+              "description": "The volume size for each node",
+              "type": "integer",
+              "default": 10,
+              "required": "no"
+            }
+          ]
+        },
+        {
+          "key": "log_node",
+          "label": "Log Server Node",
+          "description": "Log server to collect all log files from all Tomcat nodes",
+          "type": "array",
+          "properties": [
+            {
+              "key": "cpu",
+              "label": "CPU",
+              "description": "CPUs of each node",
+              "type": "integer",
+              "default": 1,
+              "range": [
+                1,
+                2,
+                4,
+                8
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "memory",
+              "label": "Memory",
+              "description": "memory of each node",
+              "type": "integer",
+              "default": 2048,
+              "range": [
+                2048,
+                4096,
+                8192
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "instance_class",
+              "label": "Instance Class",
+              "description": "",
+              "type": "integer",
+              "default": 0,
+              "range": [
+                0,
+                1
+              ],
+              "required": "yes"
+            },
+            {
+              "key": "volume_size",
+              "label": "Volume Size",
+              "description": "The volume size for this log server",
+              "type": "integer",
+              "default": 10,
+              "required": "no"
+            }
+          ]
+        }			
+      ]
+    },
+    {
+      "key": "env",
+      "description": "Tomcat cluster service properties",
+      "type": "array",
+      "properties": [
+        {
+          "key": "java_version",
+          "label": "Version of Java",
+          "description": "Choose proper Java version to run Tomcat, NOTE: Tomcat 9.x only supports Java 8&9",
+          "type": "string",
+          "default": "8",
+          "range": [
+            "7",
+            "8",
+            "9"
+          ],
+          "changeable": false,
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_version",
+          "label": "Version of Tomcat",
+          "description": "Version of Tomcat",
+          "type": "string",
+          "default": "7",
+          "range": [
+            "7",
+            "8",
+            "9"
+          ],
+          "changeable": false,
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_user",
+          "label": "User name to access Tomcat manager GUI",
+          "description": "User name to access Tomcat manager GUI, avoid to set it as 'tomcat' because it's already predefined with role 'manager_script'",
+          "type": "string",
+          "default": "qingAdmin",
+          "pattern": "^(?!.*?[tT][oO][mM][cC][aA][tT]).*$",
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_pwd",
+          "label": "Password to access Tomcat manager",
+          "description": "Password to access Tomcat manager GUI and the user 'tomcat' with role 'manager_script', the default password is 'qing0pwd'",
+          "type": "password",
+          "changeable": true,
+          "default": "qing0pwd",
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_encoding",
+          "label": "Tomcat character encoding",
+          "description": "Tomcat character encoding, this value will be set in javax.servlet.request.encoding and file.encoding when launching Tomcat, also set in URIEncoding in server.xml",
+          "type": "string",
+          "default": "UTF-8",
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_log_level",
+          "label": "Tomcat logging level",
+          "description": "The logging level of log4j within Tomcat scope, settting 'INFO' as default value",
+          "type": "string",
+          "default": "INFO",
+          "range": [
+            "OFF",
+            "FATAL",
+            "ERROR",
+            "WARN",
+            "INFO",
+            "DEBUG",
+            "ALL"
+          ],
+          "required": "yes"
+        },
+        {
+          "key": "tomcat_log_packages",
+          "label": "Tomcat logging packages",
+          "description": "Packages to include in the logging, separated by comma. Tomcat defines loggers by Engine and Host names. For example: log4j.logger.org.apache.catalina.core.ContainerBase.[Catalina].[localhost],log4j.logger.org.apache.catalina.session",
+          "type": "string",
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "threadpool_maxThreads",
+          "label": "The max number of active threads",
+          "description": "The max number of active threads in Tomcat shared thread pool",
+          "type": "string",
+          "default": "200",
+          "required": "yes"
+        },
+        {
+          "key": "threadpool_minSpareThreads",
+          "label": "The minimum number of kept alive threads",
+          "description": "The minimum number of threads always kept alive in Tomcat shared thread pool",
+          "type": "string",
+          "default": "25",
+          "required": "yes"
+        },
+        {
+          "key": "threadpool_maxIdleTime",
+          "label": "The number of milliseconds before an idle thread shutsdown",
+          "description": "The number of milliseconds before an idle thread shutsdown, unless the number of active threads are less or equal to minSpareThreads",
+          "type": "string",
+          "default": "60000",
+          "required": "yes"
+        },
+        {
+          "key": "java_opts",
+          "label": "Java runtime properties",
+          "description": "Java runtime properties when running Tomcat, leave empty if you accept our default JVM heap size setting(1/4 memory as xms, and 1/2 memory as xmx). Note: our default setting will not take effect if you input any value in this area, the validaton of JAVA_OPTS should be handled by you ahead of time, otherwise Tomcat server may fail to start",
+          "type": "string",
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "war_source",
+          "label": "How to get WAR file",
+          "description": "Choose a way to upload WAR to Tomcat server, the default way is using Tomcat manager UI or command, the other option is QingStor. Note: Tomcat manager could only deploy WAR to single node, we monitor that deployment and copy the deployed WAR file to watched folder of Tomcat FarmWarDeployer, which will distribute this file to other nodes",
+          "type": "string",
+          "changeable": true,
+          "default": "tomcat_manager",
+          "range": [
+            "tomcat_manager",
+            "qingstor"
+          ],
+          "required": "yes"
+        },
+        {
+          "key": "redis_db_num",
+          "label": "Redis database number",
+          "description": "Redis Database Number, leave empty if you choose not to use Redis database",
+          "type": "string",
+          "default": "0",
+          "required": "no"
+        },
+        {
+          "key": "access_key_id",
+          "label": "access_key_id",
+          "description": "access_key_id to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
+          "type": "string",
+          "changeable": true,
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "secret_access_key",
+          "label": "secret_access_key",
+          "description": "secret_access_key to access QingStor service for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
+          "type": "password",
+          "changeable": true,
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "zone",
+          "label": "zone",
+          "description": "Zone of bucket for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
+          "type": "string",
+          "changeable": true,
+          "default": "pek3a",
+          "range": [
+            "pek3a",
+            "sh1a"
+          ],
+          "required": "no"
+        },
+        {
+          "key": "bucket",
+          "label": "bucket",
+          "description": "Bucket name for web application(WAR) deployment, leave empty if you chooose to use Tomcat Manager",
+          "type": "string",
+          "changeable": true,
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "war_name",
+          "label": "war name",
+          "description": "The web application(WAR) file Name, leave empty if you chooose to use Tomcat Manager",
+          "type": "string",
+          "default": "",
+          "required": "no"
+        },
+        {
+          "key": "mysql_db_name",
+          "label": "MySql database name",
+          "description": "MySql Database Name, leave empty if you choose not to use MySql database",
+          "type": "string",
+          "default": "mysql",
+          "required": "no"
+        },
+        {
+          "key": "jdbc_dsname",
+          "label": "Datasoure name of Tomcat JDBC connection pool",
+          "description": "Datasoure name of Tomcat JDBC connection pool to connect MySql database",
+          "type": "string",
+          "default": "TestDB",
+          "required": "no"
+        },
+        {
+          "key": "jdbc_maxActive",
+          "label": "The maximum number of active database connections",
+          "description": "The maximum number of active database connections that can be allocated from this pool at the same time",
+          "type": "string",
+          "default": "100",
+          "required": "no"
+        },
+        {
+          "key": "jdbc_maxIdle",
+          "label": "The maximum number of kept database connections",
+          "description": "The maximum number of database connections that should be kept in the pool at all times",
+          "type": "string",
+          "default": "30",
+          "required": "no"
+        },
+        {
+          "key": "jdbc_maxWait",
+          "label": "The maximum number of milliseconds before a database connection timeout",
+          "description": "The maximum number of milliseconds that the pool will wait (when there are no available connections) for a database connection to be returned before throwing an exception",
+          "type": "string",
+          "default": "30000",
+          "required": "no"
+        }
+      ]
+    }
+  ]
 }

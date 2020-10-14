@@ -30,9 +30,9 @@
             },
              "vertical_scaling_policy": "sequential",
              "services": {
-             	 "init": {
-             	 	"cmd": "/opt/Tomcat/scripts/init-tomcat-node.sh"
-             	 },
+                  "init": {
+                      "cmd": "/opt/Tomcat/scripts/init-tomcat-node.sh"
+                  },
                  "start": {
                     "cmd": "systemctl restart rsyslog;/opt/Tomcat/scripts/restart-server.sh"
                  },
@@ -43,7 +43,7 @@
                      "cmd": "/opt/apache-tomcat/bin/stop-server.sh"
                  },
                  "redeploy WAR for QingStor": {
-                 	 "type": "custom",
+                      "type": "custom",
                      "cmd": "/opt/apache-tomcat/bin/get-war.sh"
                  }
              },
@@ -152,9 +152,9 @@
                 "filesystem": "ext4"
              },
              "services": {
-             	 "init": {
-             	 	"cmd": "chmod +x /opt/setup_hosts.sh;/opt/setup_hosts.sh;systemctl restart rsyslog"
-             	 },
+                  "init": {
+                      "cmd": "chmod +x /opt/setup_hosts.sh;/opt/setup_hosts.sh;systemctl restart rsyslog"
+                  },
                  "start": {
                     "cmd": "systemctl start rsyslog"
                  },
@@ -181,13 +181,13 @@
          "threadpool_maxIdleTime": {{env.threadpool_maxIdleTime}},
          "java_opts": {{env.java_opts}},
          "war_source": {{env.war_source}},
-     	 "redis_db_num": {{env.redis_db_num}},
+          "redis_db_num": {{env.redis_db_num}},
          "qingstor_access_key_id": {{env.access_key_id}},
          "qingstor_secret_access_key": {{env.secret_access_key}},
          "qingstor_zone": {{env.zone}},
          "qingstor_bucket": {{env.bucket}},
          "qingstor_war_name": {{env.war_name}},
-     	 "mysql_db_name": {{env.mysql_db_name}},
+          "mysql_db_name": {{env.mysql_db_name}},
          "mysql_ip_mode": "write_ip",
          "jdbc_dsname": {{env.jdbc_dsname}},
          "jdbc_maxActive": {{env.jdbc_maxActive}},
